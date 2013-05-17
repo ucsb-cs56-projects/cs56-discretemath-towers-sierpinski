@@ -74,6 +74,7 @@ public class S extends JPanel{
 
 		}
 
+
 		for (int i=0;i<order.length();i++){
 			String[] b = mBase.split(",");
 			String[] h = hBase.split(",");
