@@ -22,14 +22,14 @@ public class S extends JPanel{
 		setSize(width,height);
 		double min = Math.min(width,height); //wrong got bored
 		*/
-		side=900;
+		side=700;
 		sL=side/(Math.pow(2,n+1)-1);
 		colors = new ArrayList<Color>();
 		for (int i=0;i<n+1;i++){
 			colors.add(new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255)));
 		}
 		tx=600.0;
-		ty=50.0;
+		ty=100.0;
 
 		tS=5;
 		hS=30;
@@ -42,9 +42,9 @@ public class S extends JPanel{
 		
 		Graphics2D g2 = (Graphics2D) g.create();
 
-		double eH = 10;
-		double tW = sL;
-		double tH = 2*sL/3;
+		double tW = sL*4/5;
+		double tH = 3*sL/5;
+		double eH = Math.min(tH/(n+1),20);
 
 		int[] disks = {1,1,1};
 		
@@ -53,11 +53,12 @@ public class S extends JPanel{
 		
 		double dx = sL * Math.cos(Math.PI/3);
 		double dy = sL * Math.sin(Math.PI/3);
+
 		double tcX = tX;
-		double tcY = tY-hS;
-		double lcX = tX - dx - hS-tW/2;
+		double tcY = tY/*-hS*/;
+		double lcX = tX - dx/* - hS-tW/2*/;
 		double lcY = tY+dy;
-		double rcX = tX + dx + hS + tW/2;
+		double rcX = tX + dx/* + hS + tW/2*/;
 		double rcY = tY+dy;
 		
 		Point2D.Double[] p = {new Point2D.Double(lcX,lcY),new Point2D.Double(tcX,tcY),new Point2D.Double(rcX,rcY)};
@@ -83,11 +84,15 @@ public class S extends JPanel{
 					mBase=""+b[2].charAt(1)+b[2].charAt(0)+","+b[1].charAt(1)+b[1].charAt(0)+","+b[0].charAt(1)+b[0].charAt(0);
 					if (depth==0){
 						
-						g2.setColor(colors.get(n-i));
+						g.setFont(eF);
+						int d = Integer.parseInt(h[1]);
 						for (int j = 0; j < 3; j++){
-							g2.fill(new Ellipse2D.Double(p[j].x-tW/2+(Integer.parseInt(h[1]))*tW/3, p[j].y-eH*disks[1],tW/3,eH));
+							g2.setColor(colors.get(n-i));
+							g2.fill(new Ellipse2D.Double(p[j].x-tW/2+d*tW/3, p[j].y-eH*disks[d],tW/3,eH));
+							g2.setColor(Color.BLACK);
+							g2.drawString(""+(n-i),(float)(p[j].x-tW/3+d*tW/3),(float)(p[j].y-eH*(disks[d]-1)));
 						}
-						disks[1]++;
+						disks[d]++;
 						hBase = ""+h[2]+","+h[1]+","+h[0];
 					}
 
@@ -97,25 +102,32 @@ public class S extends JPanel{
 
 					if (depth==0){
 					
-						g2.setColor(colors.get(n-i));
+						g.setFont(eF);
+						int d = Integer.parseInt(h[2]);
 						for (int j = 0; j < 3; j++){
-							g2.fill(new Ellipse2D.Double(p[j].x-tW/2+(Integer.parseInt(h[2]))*tW/3, p[j].y-eH*disks[2],tW/3,eH));
+							g2.setColor(colors.get(n-i));
+							g2.fill(new Ellipse2D.Double(p[j].x-tW/2+d*tW/3, p[j].y-eH*disks[d],tW/3,eH));
+							g2.setColor(Color.BLACK);
+							g2.drawString(""+(n-i),(float)(p[j].x-tW/3+d*tW/3),(float)(p[j].y-eH*(disks[d]-1)));
 						}
-						disks[2]++;	
+						disks[d]++;	
 						hBase= ""+h[1]+","+h[0]+","+h[2];
 					}
 					break;
 				case 'L':
 					mBase=""+b[1]+","+b[0]+","+b[2].charAt(1)+b[2].charAt(0);
 
-
 					if(depth==0){
 					
-						g2.setColor(colors.get(n-i));
+						g.setFont(eF);
+						int d = Integer.parseInt(h[0]);
 						for (int j = 0; j < 3; j++){
-							g2.fill(new Ellipse2D.Double(p[j].x-tW/2+(Integer.parseInt(h[0]))*tW/3, p[j].y-eH*disks[0],tW/3,eH));
+							g2.setColor(colors.get(n-i));
+							g2.fill(new Ellipse2D.Double(p[j].x-tW/2+d*tW/3, p[j].y-eH*disks[d],tW/3,eH));
+							g2.setColor(Color.BLACK);
+							g2.drawString(""+(n-i),(float)(p[j].x-tW/3+d*tW/3),(float)(p[j].y-eH*(disks[d]-1)));
 						}
-						disks[0]++;
+						disks[d]++;
 						hBase=""+h[0]+","+h[2]+","+h[1];
 					}
 					break;
@@ -124,14 +136,14 @@ public class S extends JPanel{
 		}
 		if (depth==0){
 			String[] h = hBase.split(",");
-			g2.setColor(colors.get(0));
+			g2.setFont(eF);
 			for (int j = 0; j < 3; j++){
-				g2.fill(new Ellipse2D.Double(p[j].x-tW/2+(Integer.parseInt(h[j]))*tW/3, p[j].y-eH*disks[j],tW/3,eH));
+				int d = Integer.parseInt(h[j]);
+				g2.setColor(colors.get(0));
+				g2.fill(new Ellipse2D.Double(p[j].x-tW/2+d*tW/3, p[j].y-eH*disks[d],tW/3,eH));
+				g2.setColor(Color.BLACK);
+				g2.drawString(""+0,(float)(p[j].x-tW/3+d*tW/3),(float)(p[j].y-eH*(disks[d]-1)));
 			}						
-		//	g2.fill(new Ellipse2D.Double(tX-sL/2+(Integer.parseInt(h[1]))*sL/3, tY-eH*(n+1),sL/3,eH));
-		//	g2.fill(new Ellipse2D.Double(tX-dx-sL/2+(Integer.parseInt(h[0]))*sL/3, tY+dy-eH*(n+1),sL/3,eH));
-		//	g2.fill(new Ellipse2D.Double(tX+dx-sL/2+(Integer.parseInt(h[2]))*sL/3, tY+dy-eH*(n+1),sL/3,eH));
-			
 		}
 		String move = "move "+depth+": ";
 		String[]  b = mBase.split(",");
@@ -191,7 +203,7 @@ public class S extends JPanel{
 		JScrollPane jsp = new JScrollPane(s,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		f.add(jsp);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setSize(3000,3000);
+		f.setSize(1200,800);
 		f.setVisible(true);
 
 	}
