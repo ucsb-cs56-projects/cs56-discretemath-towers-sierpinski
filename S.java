@@ -10,6 +10,8 @@ public class S extends JPanel{
 	private ArrayList<Color>colors;
 	private double tx, ty;
 	private double side, sL;
+	private double tS, hS;
+	private Font mF, eF;
 
 	public S(int n){
 		this.n=n;
@@ -21,10 +23,33 @@ public class S extends JPanel{
 		}
 		tx=600.0;
 		ty=50.0;
+
+		tS=5;
+		hS=30;
+		mF=new Font("Arial", Font.PLAIN, 12);
+		eF=mF;
 	}
 
 	public void drawMove(Graphics g, int depth, double tX, double tY, String order){	
 		//order stuff
+		String base = "01,02,12";
+		for (char c: order.toCharArray()){
+			String[] b = base.split(",");
+			switch(c){
+				case 'T': 
+					base=""+b[2].charAt(1)+b[2].charAt(0)+","+b[1].charAt(1)+b[1].charAt(0)+","+b[0].charAt(1)+b[0].charAt(0);
+					break;
+				case 'R':
+					base=""+b[0].charAt(1)+b[0].charAt(0)+","+b[2]+","+b[1];
+					break;
+				case 'L':
+					base=""+b[1]+","+b[0]+","+b[2].charAt(1)+b[2].charAt(0);
+					break;
+			}
+
+		}
+		String move = "move "+depth+": ";
+		String[]  b = base.split(",");
 
 		double x1 = sL * (Math.pow(2,depth)-1) * Math.cos(Math.PI/3);
 		double y1 = sL * (Math.pow(2,depth)-1) * Math.sin(Math.PI/3);
@@ -43,6 +68,15 @@ public class S extends JPanel{
 		g2.draw(new Line2D.Double(bX,bY,bX+sL,bY));
 
 		//draw Strings along lines
+		AffineTransform at = new AffineTransform();
+		g2.setFont(mF);
+		g2.drawString(move+b[1].charAt(0)+"->"+b[1].charAt(1),(float)(bX+tS),(float)(bY+tS));
+		at.rotate(-Math.PI/3);
+		g2.setFont(mF.deriveFont(at));
+		g2.drawString(move+b[0].charAt(0)+"->"+b[0].charAt(1),(float)(tX-x2-tS),(float)(tY+y2-tS));
+		at.rotate(2*Math.PI/3);
+		g2.setFont(mF.deriveFont(AffineTransform.getRotateInstance(Math.PI/3)));
+		g2.drawString(move+b[2].charAt(0)+"->"+b[2].charAt(1),(float)(tX+x1+tS),(float)(tY+y1+tS));
 
 	}	
 
@@ -68,9 +102,11 @@ public class S extends JPanel{
 	public static void main(String[] args){
 
 		JFrame f = new JFrame("yo");
-		f.setContentPane(new S(Integer.parseInt(args[0])));
+		S s = new S(Integer.parseInt(args[0]));
+		JScrollPane jsp = new JScrollPane(s,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		f.add(jsp);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setSize(1200,900);
+		f.setSize(3000,3000);
 		f.setVisible(true);
 
 	}
