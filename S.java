@@ -10,11 +10,18 @@ public class S extends JPanel{
 	private ArrayList<Color>colors;
 	private double tx, ty;
 	private double side, sL;
+	private double width,height;
 	private double tS, hS;
 	private Font mF, eF;
 
-	public S(int n){
+	public S(int n /*, double width, double height*/){
 		this.n=n;
+		/*
+		this.width=width;
+		this.height=height;
+		setSize(width,height);
+		double min = Math.min(width,height); //wrong got bored
+		*/
 		side=900;
 		sL=side/(Math.pow(2,n+1)-1);
 		colors = new ArrayList<Color>();
@@ -32,31 +39,102 @@ public class S extends JPanel{
 
 	public void drawMove(Graphics g, int depth, double tX, double tY, String order){	
 		//order stuff
-		String base = "01,02,12";
-		for (char c: order.toCharArray()){
-			String[] b = base.split(",");
-			switch(c){
+		
+		Graphics2D g2 = (Graphics2D) g.create();
+
+		double eH = 10;
+
+		String mBase = "01,02,12";
+		String hBase = "0,1,2";
+		
+		double dx = sL * Math.cos(Math.PI/3);
+		double dy = sL * Math.sin(Math.PI/3);
+
+		if(depth==0){
+			g2.draw(new Line2D.Double(tX-sL/2,tY,tX+sL/2,tY));
+			g2.draw(new Line2D.Double(tX-sL/3,tY,tX-sL/3,tY-2*sL/3));
+			g2.draw(new Line2D.Double(tX,tY,tX,tY-2*sL/3));
+			g2.draw(new Line2D.Double(tX+sL/3,tY,tX+sL/3,tY-2*sL/3));
+			
+			g2.draw(new Line2D.Double(tX-dx-sL/2,tY+dy,tX-dx+sL/2,tY+dy));
+			g2.draw(new Line2D.Double(tX-dx-sL/3,tY+dy,tX-dx-sL/3,tY+dy-2*sL/3));
+			g2.draw(new Line2D.Double(tX-dx,tY+dy,tX-dx,tY+dy-2*sL/3));
+			g2.draw(new Line2D.Double(tX-dx+sL/3,tY+dy,tX-dx+sL/3,tY+dy-2*sL/3));
+			
+			g2.draw(new Line2D.Double(tX+dx-sL/2,tY+dy,tX+dx+sL/2,tY+dy));
+			g2.draw(new Line2D.Double(tX+dx-sL/3,tY+dy,tX+dx-sL/3,tY+dy-2*sL/3));
+			g2.draw(new Line2D.Double(tX+dx,tY+dy,tX+dx,tY+dy-2*sL/3));
+			g2.draw(new Line2D.Double(tX+dx+sL/3,tY+dy,tX+dx+sL/3,tY+dy-2*sL/3));
+		}
+
+		for (int i=0;i<order.length();i++){
+			String[] b = mBase.split(",");
+			String[] h = hBase.split(",");
+			switch(order.charAt(i)){
 				case 'T': 
-					base=""+b[2].charAt(1)+b[2].charAt(0)+","+b[1].charAt(1)+b[1].charAt(0)+","+b[0].charAt(1)+b[0].charAt(0);
+					mBase=""+b[2].charAt(1)+b[2].charAt(0)+","+b[1].charAt(1)+b[1].charAt(0)+","+b[0].charAt(1)+b[0].charAt(0);
+					if (depth==0){
+						
+						g2.setColor(colors.get(n-i));
+
+						g2.fill(new Ellipse2D.Double(tX-sL/2+(Integer.parseInt(h[1]))*sL/3, tY-eH*(i+1),sL/3,eH));
+						g2.fill(new Ellipse2D.Double(tX-dx-sL/2+(Integer.parseInt(h[1]))*sL/3, tY+dy-eH*(i+1),sL/3,eH));
+						g2.fill(new Ellipse2D.Double(tX+dx-sL/2+(Integer.parseInt(h[1]))*sL/3, tY+dy-eH*(i+1),sL/3,eH));
+
+						hBase = ""+h[2]+","+h[1]+","+h[0];
+					}
+
 					break;
 				case 'R':
-					base=""+b[0].charAt(1)+b[0].charAt(0)+","+b[2]+","+b[1];
+					mBase=""+b[0].charAt(1)+b[0].charAt(0)+","+b[2]+","+b[1];
+
+					if (depth==0){
+					
+						g2.setColor(colors.get(n-i));
+
+						g2.fill(new Ellipse2D.Double(tX-sL/2+(Integer.parseInt(h[2]))*sL/3, tY-eH*(i+1),sL/3,eH));
+						g2.fill(new Ellipse2D.Double(tX-dx-sL/2+(Integer.parseInt(h[2]))*sL/3, tY+dy-eH*(i+1),sL/3,eH));
+						g2.fill(new Ellipse2D.Double(tX+dx-sL/2+(Integer.parseInt(h[2]))*sL/3, tY+dy-eH*(i+1),sL/3,eH));
+
+						hBase= ""+h[1]+","+h[0]+","+h[2];
+
+					}
 					break;
 				case 'L':
-					base=""+b[1]+","+b[0]+","+b[2].charAt(1)+b[2].charAt(0);
+					mBase=""+b[1]+","+b[0]+","+b[2].charAt(1)+b[2].charAt(0);
+
+
+					if(depth==0){
+					
+						g2.setColor(colors.get(n-i));
+
+						g2.fill(new Ellipse2D.Double(tX-sL/2+(Integer.parseInt(h[0]))*sL/3, tY-eH*(i+1),sL/3,eH));
+						g2.fill(new Ellipse2D.Double(tX-dx-sL/2+(Integer.parseInt(h[0]))*sL/3, tY+dy-eH*(i+1),sL/3,eH));
+						g2.fill(new Ellipse2D.Double(tX+dx-sL/2+(Integer.parseInt(h[0]))*sL/3, tY+dy-eH*(i+1),sL/3,eH));
+
+						hBase=""+h[0]+","+h[2]+","+h[1];
+					}
 					break;
 			}
 
 		}
+
+		String[] h = hBase.split(",");
+		g2.setColor(colors.get(0));
+
+		g2.fill(new Ellipse2D.Double(tX-sL/2+(Integer.parseInt(h[1]))*sL/3, tY-eH*(n+1),sL/3,eH));
+		g2.fill(new Ellipse2D.Double(tX-dx-sL/2+(Integer.parseInt(h[0]))*sL/3, tY+dy-eH*(n+1),sL/3,eH));
+		g2.fill(new Ellipse2D.Double(tX+dx-sL/2+(Integer.parseInt(h[2]))*sL/3, tY+dy-eH*(n+1),sL/3,eH));
+		
+
 		String move = "move "+depth+": ";
-		String[]  b = base.split(",");
+		String[]  b = mBase.split(",");
 
 		double x1 = sL * (Math.pow(2,depth)-1) * Math.cos(Math.PI/3);
 		double y1 = sL * (Math.pow(2,depth)-1) * Math.sin(Math.PI/3);
 		double x2 = sL * (Math.pow(2,depth)) * Math.cos(Math.PI/3);
 		double y2 = sL * (Math.pow(2,depth)) * Math.sin(Math.PI/3);
 
-		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(colors.get(depth));
 		g2.setStroke(new BasicStroke(3));
 		g2.draw(new Line2D.Double(tX-x1,tY+y1,tX-x2,tY+y2));
@@ -78,6 +156,7 @@ public class S extends JPanel{
 		g2.setFont(mF.deriveFont(AffineTransform.getRotateInstance(Math.PI/3)));
 		g2.drawString(move+b[2].charAt(0)+"->"+b[2].charAt(1),(float)(tX+x1+tS),(float)(tY+y1+tS));
 
+		g2.dispose();
 	}	
 
 	public void drawSerpienski(Graphics g, int depth, double topX, double topY, String order){
