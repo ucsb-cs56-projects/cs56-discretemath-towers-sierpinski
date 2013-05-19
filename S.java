@@ -121,7 +121,9 @@ public class S extends JPanel{
 	
     }
 	*/
-	
+	if(lefttopright.length()==0{
+	    }
+	    else{	
 	block:{
 	    
 	    //for(int q = 0; q<lefttopright.length();q++){
@@ -316,7 +318,7 @@ public class S extends JPanel{
 	    
 	}
 	
-	
+	    }
 	
 	
 	drawTowers(tcX,tcY,sideLength,g);
@@ -330,6 +332,8 @@ public class S extends JPanel{
 	String hBase = "0,1,2";
 	for (int i=0;i<lefttopright.length();i++){
 	    double newWidth= tW*(lefttopright.length()-i*.5)/lefttopright.length();
+	    if(lefttopright.length()==0)
+		newWidth=tW;
 	    String[] h = hBase.split(",");
 	    switch(lefttopright.charAt(i)){
 	    case 'T': 
@@ -386,6 +390,7 @@ public class S extends JPanel{
 	if (depth==0){
 	    
 	    double newWidth= tW/lefttopright.length();
+	    if(lefttopright.length()==0)newWidth=tW;
 	    if(lefttopright.length()==1)newWidth=tW/2;
 	    String[] h = hBase.split(",");
 	    for (int j = 0; j < 3; j++){
