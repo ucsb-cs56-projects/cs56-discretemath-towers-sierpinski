@@ -387,20 +387,39 @@ public class S extends JPanel{
 
 	}
 	
-	if (depth==0){
-	    
+	if (depth==0){	    
 	    double newWidth= tW/lefttopright.length();
-	    if(lefttopright.length()==0)newWidth=tW;
-	    if(lefttopright.length()==1)newWidth=tW/2;
-	    String[] h = hBase.split(",");
-	    for (int j = 0; j < 3; j++){
-		int d = Integer.parseInt(h[j]);
-		g2d.setColor(colors.get(0));
-		//Ellipse2D disk2 = centerOfDisk(p[j].x-tW/2+d*tW/3+tW/4, p[j].y-eH*disks[d]+eH/2,newWidth/3,eH);
-		//g2d.fill(disk2);
-		g2d.fill(new Ellipse2D.Double(p[j].x-tW/2+d*tW/3+tW/12, p[j].y-eH*disks[d],newWidth/3,eH));
-		g2d.setColor(Color.BLACK);
-		g2d.drawString(""+0,(float)(p[j].x-tW/3+d*tW/3-tW/16),(float)(p[j].y-eH*(disks[d]-1)));
+	    if(lefttopright.length()==0){
+		newWidth=tW;
+		String[] h = hBase.split(",");
+		for (int j = 0; j < 3; j++){
+		    int d = Integer.parseInt(h[j]);
+		    g2d.setColor(colors.get(0));
+		    Ellipse2D disk2 = centerOfDisk(p[j].x-tW/2+tW/2, p[j].y-eH*disks[d]+eH/2,newWidth/3,eH);
+		    g2d.fill(disk2);
+		    //g2d.fill(new Ellipse2D.Double(p[j].x-tW/2+d*tW/3, p[j].y-eH*disks[d],newWidth/3,eH));
+		    g2d.setColor(Color.BLACK);
+		    if(lefttopright.length()==0)
+			g2d.drawString(""+0,(float)(p[j].x-tW/2+tW/2),(float)(p[j].y-eH*(disks[d]-1)));
+		    else
+			g2d.drawString(""+0,(float)(p[j].x-tW/3+d*tW/3-tW/16),(float)(p[j].y-eH*(disks[d]-1)));
+		}
+	    }
+	    else{
+		if(lefttopright.length()==1)newWidth=tW/2;
+		String[] h = hBase.split(",");
+		for (int j = 0; j < 3; j++){
+		    int d = Integer.parseInt(h[j]);
+		    g2d.setColor(colors.get(0));
+		    Ellipse2D disk2 = centerOfDisk(p[j].x-tW/2+d*tW/3+tW/6, p[j].y-eH*disks[d]+eH/2,newWidth/3,eH);
+		    g2d.fill(disk2);
+		    //g2d.fill(new Ellipse2D.Double(p[j].x-tW/2+d*tW/3+tW/12, p[j].y-eH*disks[d],newWidth/3,eH));
+		    g2d.setColor(Color.BLACK);
+		    if(lefttopright.length()==0)
+			g2d.drawString(""+0,(float)(p[j].x-tW/3+d*tW/3),(float)(p[j].y-eH*(disks[d]-1)));
+		    else
+			g2d.drawString(""+0,(float)(p[j].x-tW/3+d*tW/3-tW/16),(float)(p[j].y-eH*(disks[d]-1)));
+		}
 	    }
 	}
 	
