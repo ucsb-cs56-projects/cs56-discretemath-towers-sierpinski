@@ -19,7 +19,7 @@ public class SVSierpinski {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        SierpinskiTriangleBuilder builder = new SierpinskiTriangleBuilder(3);
+        SierpinskiTriangleBuilder builder = new SierpinskiTriangleBuilder(4);
         SVCanvas c = new SVCanvas();
         c.addXMLContent(builder.build());
         c.saveTo("/Users/martinwolfenbarger/Desktop/test.svg");
