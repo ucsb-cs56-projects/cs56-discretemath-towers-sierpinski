@@ -17,6 +17,9 @@ public class SierpinskiTriangleBuilder {
         this.disks = disks;
     }
     
+    
+    /** Returns the actual SVGraphics item that is the Sierpinski triangle
+     */
     public SVCustom build(){
         if(this.disks < 1) return new SVCustom();
         SVCustom s = new SVCustom(new Point(100, (int)Math.pow(2, this.disks)*104 - 52));
@@ -29,6 +32,8 @@ public class SierpinskiTriangleBuilder {
         return s;
     }
     
+    /** Builds the arraylist of arraylist integers that represent the current state of the game.
+     */
     public static ArrayList<ArrayList<Integer>> buildInitial(int disks) {
         ArrayList<ArrayList<Integer>> a = new ArrayList<ArrayList<Integer>>();
         a.add(new ArrayList<Integer>());

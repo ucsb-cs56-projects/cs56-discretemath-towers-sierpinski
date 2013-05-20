@@ -20,7 +20,7 @@ abstract class SVDefault extends SVGraphics{
         setTag(tag);
     }
     
-    /** 1-arg super constructor called in addition to setting tag value to
+    /** 2-arg super constructor called in addition to setting tag value to
        given parameter and location
        @param tag string value of tag type
      */

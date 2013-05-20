@@ -7,8 +7,8 @@ import java.awt.Point;
 import java.math.*;
 
 /**
- * SVSierpinski class uses SVGraphics package to draw the Sierpinski triangle 
- * representing each possible move in the Towers of Hanoi game.
+ * SVSierpinski class demonstrates how to use SierpinskiTriangle and SVGraphics 
+ * packages.
  *
  * @author Martin Wolfenbarger
  * @version 2013/05/16 
@@ -22,6 +22,6 @@ public class SVSierpinski {
         SierpinskiTriangleBuilder builder = new SierpinskiTriangleBuilder(4);
         SVCanvas c = new SVCanvas();
         c.addXMLContent(builder.build());
-        //c.saveTo("/Users/martinwolfenbarger/Desktop/test.svg");
+        //c.saveTo("File path goes here");
     }
 }
