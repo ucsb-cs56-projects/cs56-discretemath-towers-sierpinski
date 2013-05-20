@@ -15,14 +15,14 @@ public class SVRectangle extends SVDefault {
     /** no-arg constructor calls super with rectangle tag name
      */
     public SVRectangle() {
-        super("rectangle");
+        super("rect");
     }
     
     /** one-arg constructor calls super with rectangle tag name and location
         @param location 
      */
     public SVRectangle(Point location) {
-        super("rectangle",location);
+        super("rect",location);
     }
     
     /** two-arg constructor calls super with rectangle tag name, location,
@@ -32,7 +32,7 @@ public class SVRectangle extends SVDefault {
         @param height 
      */
     public SVRectangle(Point location, int width, int height) {
-        super("rectangle",location);
+        super("rect",location);
         this.setWidth(width);
         this.setHeight(height);
     }
