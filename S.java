@@ -612,8 +612,9 @@ public class S extends JPanel{
     public static void main(String[] args){
 	System.out.println("start");
 	JFrame f = new JFrame("yo");
-	f.setContentPane(new Tester(Integer.parseInt(args[0])));
+	//f.setContentPane(new Tester(Integer.parseInt(args[0])));
 	//S s = new S(6);
+	S s = new S(Integer.parseInt(args[0]));
 	JScrollPane jsp = new JScrollPane(s,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 	f.add(jsp);
 	//f.setContentPane(new S(4));
