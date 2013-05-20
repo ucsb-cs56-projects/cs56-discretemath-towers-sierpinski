@@ -48,7 +48,6 @@ public class SierpinskiTriangle extends SVCustom{
             this.buildTopTower();
             this.buildRightTower();
         }
-        
     }
     
     public static int getDiskLocation(ArrayList<ArrayList<Integer>> a, int base) {

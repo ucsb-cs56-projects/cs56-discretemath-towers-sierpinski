@@ -4,9 +4,9 @@ import SVGraphics.*;
 import java.awt.Color;
 import java.awt.Point;
 
+
 /**
- * SierpinskiTriangleBuilder class extends SVCustom to create side of 
- * each triangle
+ * TriangleSide class extends SVCustom. Used by SierpinskiTriangle class.
  *
  * @author Martin Wolfenbarger
  * @version 2013/05/16 
@@ -23,5 +23,4 @@ public class TriangleSide extends SVCustom{
         addContent(s, "rectangle");
         addContent(t, "text");
     }
-    
 }

@@ -3,9 +3,13 @@ import SVGraphics.*;
 import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
+
 /**
+ * Tower class extends SVCustom and creates a visual representation of 
+ * the current state of the Towers of Hanoi game
  *
- * @author martinwolfenbarger
+ * @author Martin Wolfenbarger
+ * @version 2013/05/16 
  */
 public class Tower extends SVCustom{
     
