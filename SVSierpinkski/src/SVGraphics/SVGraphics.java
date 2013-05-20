@@ -139,8 +139,10 @@ public class SVGraphics {
         String str = "";
         Point location = this.getLocation();
         Integer rotation = this.getRotation();
+        String s = this.getAttribute("scale");
         if(!location.equals(new Point(0,0))) str += "translate(" + location.x + "," + location.y + ") ";
         if(rotation != 0) str += "rotate(" + rotation + ") ";
+        if(s != null) str+= "scale(" + s + ") ";
         return str;
     }
     

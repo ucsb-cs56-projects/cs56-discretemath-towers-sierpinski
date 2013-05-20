@@ -38,8 +38,30 @@ public class SierpinskiTriangle extends SVCustom{
             this.buildLeftTriangle();
             this.buildTopTriangle();
             this.buildRightTriangle();
+        }else{
+            this.buildLeftTower();
+            this.buildTopTower();
+            this.buildRightTower();
         }
         
+    }
+    
+    public void buildLeftTower() {
+        Tower t = new Tower(new int[]{3,2,1,0},new int[]{},new int[]{});
+        t.setLocation(new Point(0,20));
+        addContent(t,"left-tower");
+    }
+    
+    public void buildRightTower() {
+        Tower t = new Tower(new int[]{2,1,0},new int[]{},new int[]{});
+        addContent(t,"right-tower");
+        t.setLocation(new Point(120,20));
+    }
+    
+    public void buildTopTower() {
+        Tower t = new Tower(new int[]{2,1,0},new int[]{},new int[]{});
+        addContent(t,"top-tower");
+        t.setLocation(new Point(60,-95));
     }
     
     public static int[] flip(int a[]) {

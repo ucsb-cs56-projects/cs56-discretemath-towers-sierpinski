@@ -1,7 +1,7 @@
 package SVGraphics;
 
 import java.awt.Point;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ArrayList;
 import org.w3c.dom.Element;
@@ -17,7 +17,7 @@ public class SVCustom extends SVGraphics{
     
     /** Holds graphics content with corresponding keys
      */
-    private Map<String, SVGraphics> content = new HashMap<String, SVGraphics>();
+    private Map<String, SVGraphics> content = new LinkedHashMap<String, SVGraphics>();
     
     /** no-arg constructor calls super and sets tag to g
      */
