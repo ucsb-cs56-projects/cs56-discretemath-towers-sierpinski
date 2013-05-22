@@ -4,3 +4,7 @@
 *.jar
 *.war
 *.ear
+/SVGraphics/nbproject/private/
+/SVSierpinkski/nbproject/private/
+/SVSierpinkski/build/
+/SVSierpinkski/dist/
