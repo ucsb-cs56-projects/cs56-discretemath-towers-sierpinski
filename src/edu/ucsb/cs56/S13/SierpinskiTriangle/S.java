@@ -16,6 +16,11 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 
+/**
+   @author Jacob Anderson, Gordon Cheung
+   @version CS56, S13
+*/
+
 public class S extends JPanel{
 
 
@@ -30,6 +35,14 @@ public class S extends JPanel{
     
     private boolean printMessage=false;
     
+    /**
+      method to draw ellipse from the center. 
+      @param x the x component of the original ellipse
+      @param y the y component of the original ellipse
+      @param width width of the ellipse
+      @param height height of the ellipse
+
+     */
     
     public Ellipse2D centerOfDisk(double x, double y, double width, double height)//code to place from center of ellipse rather than from topleft
     {
@@ -40,6 +53,14 @@ public class S extends JPanel{
 
         return newDisk;
     }
+
+    /**
+       draws the towers based off of the top of the depth0 triangle
+       @param startX x coordinate of the top of the depth0 triangle
+       @param startY y coordinate of the top of the dpeth 0 triangle
+       @param sideLength length of a side of the triangle
+       @param g the graphics
+     */
     
     public void drawTowers(double startX, double startY, double sideLength, Graphics g){
 	//startX and startY are both based off of the bottom left of the towers
@@ -53,6 +74,18 @@ public class S extends JPanel{
     }
     
     
+
+    /**
+       draws the towers and disks
+       @param depth the number of disks-1
+       @param colors an arraylist of the colors that the disks should be
+       @param lefttopright the string of the current location of the top of depth0 triangle
+       @param g graphics
+       @param tx the x coordinate of the top of the current triangle
+       @param ty the y coordinate of the top of the current triangle
+       @param sideLength the length of a side of the triangle
+
+     */
     public void drawSystem(int depth, ArrayList<Color> colors, String lefttopright, Graphics g, double tx, double ty, double sideLength){
 	if(depth!=0){
 	    return;
@@ -500,6 +533,13 @@ public class S extends JPanel{
     private double tS, hS;
     private Font mF, eF;
 
+    /**
+       constructor
+
+       @param n the number of disks -1
+       
+     */
+
     public S(int n /*, double width, double height*/){
 	this.n=n;
 	/*
@@ -523,6 +563,16 @@ public class S extends JPanel{
 	eF=mF;
     }
 
+    
+
+    /**
+       draws a single triangle
+       @param g graphics
+       @param depth the # of disks -1
+       @param tX the x coordinate of the top of the current triangle
+       @param tY the y coordinate of the top of the current triangle
+       @param order a string that represent the location of the top of the current triangle
+     */
     public void drawMove(Graphics g, int depth, double tX, double tY, String order){
 	//order stuff
 	String base = "01,02,12";
@@ -589,6 +639,14 @@ public class S extends JPanel{
 	drawSystem(depth,colors,order,g,tX,tY,sL);
     }
 
+    /**
+       calls drawMove to draw Sierpinski's Triangle
+       @param g graphics
+       @param depth the number of disks-1
+       @param topX the x coordinate of the top of the current triangle
+       @param topY the y coordinate of the top of the current triangle
+       @param order a string to represent the location of each iteration
+     */
 
     public void drawSerpienski(Graphics g, int depth, double topX, double topY, String order){
 
@@ -605,11 +663,20 @@ public class S extends JPanel{
 	//System.out.println(order);
 
     }
+    /** 
+	paint component method
+	@param g graphics
+    */
 
     public void paintComponent(Graphics g){
 	drawSerpienski(g, n, tx, ty, "");
     }
 
+
+    /**
+       main
+       @param args the number of disks-1
+     */
     public static void main(String[] args){
 	System.out.println("start");
 	JFrame f = new JFrame("yo");
