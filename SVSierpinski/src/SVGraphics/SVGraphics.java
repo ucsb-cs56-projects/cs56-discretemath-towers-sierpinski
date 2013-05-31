@@ -80,11 +80,11 @@ public class SVGraphics {
     }
     
     /** Returns opacity of element
-        @return Float typically from 0.0 to 1.0
+        @return Double typically from 0.0 to 1.0
      */
-    public Float getOpacity() {
-        Float opacity = Float.parseFloat(this.getAttribute("opacity"));
-        if(opacity == null) return new Float(1.0); else return opacity;
+    public Double getOpacity() {
+        Double opacity = Double.parseDouble(this.getAttribute("opacity"));
+        if(opacity == null) return new Double(1.0); else return opacity;
     }
     
     /** Sets the tag variable
@@ -125,9 +125,9 @@ public class SVGraphics {
     }
     
     /** Sets opacity of element 
-        @param float value of opacity
+        @param double value of opacity
      */
-    public void setOpacity(float opacity) {
+    public void setOpacity(double opacity) {
         if(opacity != 1.0) this.setAttribute("opacity", "" + opacity);
         else this.removeTransform("opacity");
     }

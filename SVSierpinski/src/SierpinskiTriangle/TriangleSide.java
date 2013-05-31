@@ -20,6 +20,8 @@ public class TriangleSide extends SVCustom{
         s.setColor(c);
         SVText t = new SVText(new Point(0, -8),text);
         t.setAttribute("text-anchor","middle");
+        t.setAttribute("font-size", "14");
+        t.setAttribute("font-weight", "bold");
         addContent(s, "rectangle");
         addContent(t, "text");
     }
