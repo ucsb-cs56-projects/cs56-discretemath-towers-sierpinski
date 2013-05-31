@@ -12,9 +12,8 @@ import javax.swing.event.*;
 import javax.swing.colorchooser.*;
 
 /**
- ColorPickRunner class Parent Frame class that makes instances of ColorPickSaver
+ Parent Frame class that makes instances of ColorPickSaver
 */
-
 public class ColorPickRunner {
 
 	private ColorPickSaver ColorPicker;
@@ -29,7 +28,7 @@ public class ColorPickRunner {
 	private boolean open;
     
 	/**
-	 ColorPickRunner() no arg constructor that makes the GUI, and sets up private variables.
+	 no arg constructor that makes the GUI, and sets up private variables.
 	*/
     public ColorPickRunner() {
 		//MAIN FRAME, was originally in a static method, but I had difficulty passing and obtaining values between two gui instances.
@@ -76,7 +75,7 @@ public class ColorPickRunner {
 	}
 	
 	/**
-	 ChooseListener Class Creates a new instance of ColorPickSaver each time
+	 Creates a new instance of ColorPickSaver each time
 	 the button calls the ActionListener.  Also the main thread waits for the 
 	 new window to close before it can finish.
 	 */
@@ -118,7 +117,7 @@ public class ColorPickRunner {
 	}
 	
 	/** 
-	 ExitListener class called when exit button is pressed.  This exports 
+	 This class is called when exit button is pressed.  This exports 
 	 chosen colors to a Properties file.
 	 */
 	class ExitListener implements ActionListener {
@@ -134,7 +133,7 @@ public class ColorPickRunner {
 	}
 	
 	/**
-	 WriteToPropertiesFile() Method that saves the chosen colors in the ColorList 
+	 Method that saves the chosen colors in the ColorList 
 	 to a properties file in the build directory.
 	*/
 	public void WriteToPropertiesFile(){
@@ -157,7 +156,7 @@ public class ColorPickRunner {
         }
 	}
 	/**
-	 is Open() works just like how ColorPickSaver.isOpen() works with this class
+	 Method that works just like how ColorPickSaver.isOpen() works with this class
 	 This method can be used by a parent class call to determine if this window 
 	 has been closed yet.
 	 @return boolean open
@@ -167,7 +166,7 @@ public class ColorPickRunner {
 	}
 	
 	/**
-	 returnColorList() method for nonmembers to access the ColorList directly.
+	 Method for nonmembers to access the ColorList directly.
 	 @return ArrayList<Color> ColorList
 	*/
 	public ArrayList<Color> returnColorList() {

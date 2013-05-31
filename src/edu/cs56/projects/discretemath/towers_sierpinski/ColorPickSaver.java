@@ -12,7 +12,7 @@ import javax.swing.event.*;
 import javax.swing.colorchooser.*;
 
 /**
- ColorPickSaver class Acts like an inner class to the parent ColorPickRunner class.
+ Acts like an inner class to the parent call of ColorPickRunner class.
  Has its own JFrame and buttons as well as an instance of JColorChooser.
  */
 
@@ -28,7 +28,7 @@ public class ColorPickSaver implements ChangeListener {
 	public int SavedColorToExport;
     
 	/**
-	 ColorPickSaver() no arg constructor. This is called each time if you want
+	 No arg constructor. This is called each time if you want
 	 a new ColorPick frame.
 	 */
 	
@@ -72,7 +72,7 @@ public class ColorPickSaver implements ChangeListener {
 	}
 	
 	/**
-	ConfirmListener linked to the confirm button in order to know when to close and return the color chosen.
+	Listener linked to the confirm button in order to know when to close and return the color chosen.
 	 @return Color CurrentColor
 	 */
 	class ConfirmListener implements ActionListener {
@@ -87,8 +87,8 @@ public class ColorPickSaver implements ChangeListener {
 	}
 
 	/**
-	 stateChanged(ChangeEvent e) this happens whenever JColorChooser notifies 
-	 this ActionListener as to a ChangeEvent.  Why you must implement ChangeListener
+	 Method called whenever JColorChooser notifies 
+	 this ActionListener as to a ChangeEvent.  What you must implement for ChangeListener
 	 @param ChangeEvent e event that causes method to fire
 	*/
 	public void stateChanged(ChangeEvent e) {
@@ -98,7 +98,7 @@ public class ColorPickSaver implements ChangeListener {
     }
 	
 	/**
-	 isOpen() gives nonmembers access to boolean open, which is used to see if the window is still open.
+	 Gives nonmembers access to boolean open, which is used to see if the window is still open.
 	 @return boolean open 
 	*/
 	public boolean isOpen() {
@@ -106,7 +106,7 @@ public class ColorPickSaver implements ChangeListener {
 	}
 	
 	/**
-	 ReturnSelectedColor() gives nonmember access to CurrentColor, which is the color selected by the user.
+	 Gives nonmember access to CurrentColor, which is the color selected by the user.
 	 @return Color CurrentColor
 	*/
 	public Color ReturnSelectedColor() {
