@@ -82,12 +82,12 @@
  <target name="help" depends="compile" description="tells user how to run the class ${mainClass}">
     <echo>
 To run the program, type these commands:
-   ant -D#=arg S
+   ant -D#=arg run
 arg should be an integer greater than or equal to 1
    </echo>
   </target>
 
-<target name="S" depends="compile" description="runs the class ${mainClass} with arg #">
+<target name="run" depends="compile" description="runs the class ${mainClass} with arg # refer to ant help">
     <java fork="true" classname="${mainClass}" classpath="build">
     <arg line = "${#}"/>
     </java>
