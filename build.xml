@@ -88,7 +88,7 @@ arg should be an integer greater than or equal to 1
   </target>
 
 <target name="run" depends="compile" description="runs the class ${mainClass} with arg # refer to ant help">
-    <java fork="true" classname="${mainClass}" classpath="build/edu/cs56/projects/discretemath/towers_sierpinski">
+    <java fork="true" classname="edu.cs56.projects.discretemath.towers_sierpinski.${mainClass}" classpath="build">
     <arg line = "${#}"/>
     </java>
   </target>
