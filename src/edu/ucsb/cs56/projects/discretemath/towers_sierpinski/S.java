@@ -14,8 +14,8 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-
-
+import javax.swing.*;
+import java.awt.event.*;
 /**
    @author Jacob Anderson, Gordon Cheung
    @version CS56, S13
@@ -682,14 +682,20 @@ public class S extends JPanel{
 	JFrame f = new JFrame("yo");
 	//f.setContentPane(new Tester(Integer.parseInt(args[0])));
 	//S s = new S(6);
-	S s = new S(Integer.parseInt(args[0]));
+	final S s = new S(Integer.parseInt(args[0]));
 	JScrollPane jsp = new JScrollPane(s,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 	f.add(jsp);
 	//f.setContentPane(new S(4));
+	JButton b = new JButton("save");
+	b.addActionListener(new ActionListener(){
+		public void actionPerformed(ActionEvent e){
+			SaveImage.savePNG(s);
+		}
+	}); 
 	f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	f.setSize(1200,900);
 	f.setVisible(true);
-
+	
     }
 
 
