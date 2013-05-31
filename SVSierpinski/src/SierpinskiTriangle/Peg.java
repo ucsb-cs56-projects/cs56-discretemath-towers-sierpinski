@@ -28,12 +28,16 @@ public class Peg extends SVCustom{
         @param total total disks on all three pegs
      */
     private void addDisks(ArrayList<Integer> a, int total) {
+        int current;
+        int sizeFactor;
         for(int i = 0; a.size() > i; i++) {
-            SVEllipse e = new SVEllipse(new Point(0,-1*i*13+68),30-i*3,14);
-            SVEllipse esmall = new SVEllipse(new Point(0,-1*i*13+68),(26-i*3)/2,13);
-            SVText t = new SVText(new Point(0,-1*i*13+73),""+a.get(i));
+            current = a.get(i);
+            sizeFactor = 10*(current+1)/total;
+            SVEllipse e = new SVEllipse(new Point(0,-1*i*13+68),20 + sizeFactor,14);
+            SVEllipse esmall = new SVEllipse(new Point(0,-1*i*13+68),11,13);
+            SVText t = new SVText(new Point(0,-1*i*13+73),""+current);
             esmall.setColor(Color.white);
-            e.setColor(this.getCurrentColor(a.get(i)));
+            e.setColor(this.getCurrentColor(current));
             esmall.setBorderWidth(1);
             esmall.setBorderColor(Color.lightGray);
             addContent(e, "e"+i);
