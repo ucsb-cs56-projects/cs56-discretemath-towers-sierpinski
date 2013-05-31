@@ -1,13 +1,15 @@
 <project default="compile">
 
   <!-- build.xml for SierpinkskiTriangle-ColorPicker, S13, CS56
-       author: Philip Conrad -->
+       author: Will Mateer -->
 
 
    <property environment="env"/> <!-- load the environment variables --> 
+   <property name="myPackage" value="edu.cs56.projects.discretemath.towers_sierpinski" />
+   <property name="CurrentDir" value="." />
    <property name="webRoot" value="${env.HOME}/public_html/cs56" />
    <property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56" />
-   <property name="projectName" value="project1_ColorPicker" /> 
+   <property name="projectName" value="project_ColorPicker" /> 
    <property name="javadocDest" value="${webRoot}/${projectName}/javadoc" /> 
    <property name="javadocURL" value="${webBaseURL}/${projectName}/javadoc" /> 
    <property name="javadocLink" value="http://java.sun.com/javase/7/docs/api/" />
@@ -79,7 +81,7 @@
 
   <target name="run" depends="compile" description="run ColorPickRunner from src subdirectory">
     <java fork="true" classpathref="project.class.path" 
-	  classname="ColorPickRunner" />
+	  classname="${myPackage}.ColorPickRunner" />
   </target>
 
 </project>
