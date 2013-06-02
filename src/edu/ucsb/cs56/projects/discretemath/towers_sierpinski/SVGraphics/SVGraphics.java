@@ -1,4 +1,4 @@
-package edu.cs56.projects.discretemath.towers_sierpinski.SVGraphics;
+package edu.ucsb.cs56.projects.discretemath.towers_sierpinski.SVGraphics;
 
 import java.util.Map;
 import java.util.HashMap;

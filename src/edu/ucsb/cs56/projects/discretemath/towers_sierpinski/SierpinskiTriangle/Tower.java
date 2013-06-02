@@ -1,5 +1,5 @@
-package edu.cs56.projects.discretemath.towers_sierpinski.SierpinskiTriangle;
-import edu.cs56.projects.discretemath.towers_sierpinski.SVGraphics.*;
+package edu.ucsb.cs56.projects.discretemath.towers_sierpinski.SierpinskiTriangle;
+import edu.ucsb.cs56.projects.discretemath.towers_sierpinski.SVGraphics.*;
 import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;

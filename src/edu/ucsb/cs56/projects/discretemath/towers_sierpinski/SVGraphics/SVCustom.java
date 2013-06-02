@@ -1,4 +1,4 @@
-package edu.cs56.projects.discretemath.towers_sierpinski.SVGraphics;
+package edu.ucsb.cs56.projects.discretemath.towers_sierpinski.SVGraphics;
 
 import java.awt.Point;
 import java.util.LinkedHashMap;
