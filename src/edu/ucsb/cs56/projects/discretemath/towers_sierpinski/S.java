@@ -629,16 +629,24 @@ public class S extends JPanel{
 	}
 	int numDisks=Integer.parseInt(args[0]);
 	final S s = new S(numDisks-1);
-	JButton png = new JButton("save png");
+	final JButton png = new JButton("save png");
+	final JButton jpg = new JButton("save jpg");
 	png.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent e){
+			s.remove(jpg);
+			s.remove(png);
 			SaveImage.savePNG(s);
+			s.add(png);
+			s.add(jpg);
 		}
 	});
-	JButton jpg = new JButton("save jpg");
 	jpg.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent e){
+			s.remove(jpg);
+			s.remove(png);
 			SaveImage.saveJPG(s);
+			s.add(png);
+			s.add(jpg);
 		}
 	});
 	s.add(png);
