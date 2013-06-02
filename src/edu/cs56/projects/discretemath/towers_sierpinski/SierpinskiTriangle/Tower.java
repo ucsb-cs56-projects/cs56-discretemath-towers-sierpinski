@@ -19,6 +19,6 @@ public class Tower extends SVCustom{
         addContent(new SVUse("tower"),"tower");
         for(int j = 0; 3 > j; j++) 
             for(int i = 0; a.get(j).size() > i; i++) 
-                addContent(new SVUse("disk"+a.get(j).get(i), new Point(-33+j*30,-1*i*13-12)), "disk"+a.get(j).get(i));
+                addContent(new SVUse("disk"+a.get(j).get(i), new Point(-30+j*30,-1*i*13-12)), "disk"+a.get(j).get(i));
     }
 }

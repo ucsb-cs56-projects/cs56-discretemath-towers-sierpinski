@@ -14,6 +14,8 @@ import java.util.ArrayList;
  */
 public class SierpinskiTriangleBuilder {
     private int disks;
+    private int width = 960;
+    private int height = 832;
     private SVDefinitions defintions = new SVDefinitions();
     
     /** one arg constructor defines the # of disks
@@ -31,18 +33,28 @@ public class SierpinskiTriangleBuilder {
         setColors(colors);
     }
     
+    /** sets width and height of triangle, called before build
+     *  @param width int for width
+     *  @param height int for height
+     */
+    public void setDimensions(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+    
     /** sets color array list for SierpinskiTriangle class
      *  @param colors 
      */
     public void setColors(ArrayList<Color> colors) {
         SierpinskiTriangle.colors = colors;
+        for(int i = SierpinskiTriangle.colors.size(); this.disks > i; i++) SierpinskiTriangle.colors.add(Color.BLACK);
     }
     
     /** Returns the actual SVGraphics item that is the Sierpinski triangle
      */
     public SVCustom build(){
         if(this.disks < 1) return new SVCustom();
-        SVCustom s = new SVCustom(new Point(100, (int)Math.pow(2, this.disks)*104 - 52));
+        SVCustom s = new SVCustom(new Point(40, (int)Math.pow(2, this.disks)*104 - 60));
         int left[] = new int[]{0,1};
         int right[] = new int[]{1,2};
         int bottom[] = new int[]{0,2};
@@ -63,6 +75,18 @@ public class SierpinskiTriangleBuilder {
         return a;
     }
     
+    /** Creates definition elements for triangle sides once here
+     */
+    private void createSideDefinitions() {
+        for(int i = 0; this.disks > i; i++) {
+            SVRectangle s = new SVRectangle(new Point(-60,-5),120,10);
+            s.setBorderRadius(3);
+            s.setColor(SierpinskiTriangle.colors.get(i));
+            s.setId("side" + i);
+            this.defintions.addContent(s, "side"+i);
+        }
+    }
+    
     /** Creates definition elements for disks once here
      */
     private void createDiskDefinitions() {
@@ -73,16 +97,16 @@ public class SierpinskiTriangleBuilder {
             sizeFactor = 10*(i+1)/this.disks;
             SVEllipse e = new SVEllipse(new Point(0,0),20 + sizeFactor,14);
             SVEllipse esmall = new SVEllipse(new Point(0,0),11,13);
-            SVText t = new SVText(new Point(0,5),""+i);
+            SVText t = new SVText(new Point(1,4),""+i);
             esmall.setColor(Color.white);
             e.setColor(SierpinskiTriangle.colors.get(i));
             esmall.setBorderWidth(1);
             esmall.setBorderColor(Color.lightGray);
             
-        t.setAttribute("text-anchor", "middle");
-        t.setAttribute("font-size", "13");
-        t.setAttribute("font-weight", "bold");
-        
+            t.setAttribute("text-anchor", "middle");
+            t.setAttribute("font-size", "13");
+            t.setAttribute("font-weight", "bold");
+            
             d.addContent(e, "e"+i);
             d.addContent(esmall, "esmall"+i);
             d.addContent(t,"t"+i);
@@ -125,9 +149,10 @@ public class SierpinskiTriangleBuilder {
     }
     
     public void save(String file) {
-        SVCanvas c = new SVCanvas();
         this.createDiskDefinitions();
+        this.createSideDefinitions();
         this.createTowerDefinition();
+        SVCanvas c = new SVCanvas( (int)Math.pow(2, this.disks)*120 - 40, (int)Math.pow(2, this.disks)*104 - 20,this.width,this.height);
         c.addXMLContent(this.defintions);
         c.addXMLContent(this.build());
         c.saveTo(file);

@@ -13,16 +13,16 @@ import java.awt.Point;
  */
 public class TriangleSide extends SVCustom{
     
-    public TriangleSide(Color c, String text) {
+    public TriangleSide(int i, String text) {
         super();
-        SVRectangle s = new SVRectangle(new Point(-60,-5),120,10);
+        /* SVRectangle s = new SVRectangle(new Point(-60,-5),120,10);
         s.setBorderRadius(3);
-        s.setColor(c);
+        s.setColor(c); */
         SVText t = new SVText(new Point(0, -8),text);
         t.setAttribute("text-anchor","middle");
         t.setAttribute("font-size", "14");
         t.setAttribute("font-weight", "bold");
-        addContent(s, "rectangle");
+        addContent(new SVUse("side" + i), "side" + i);
         addContent(t, "text");
     }
 }
