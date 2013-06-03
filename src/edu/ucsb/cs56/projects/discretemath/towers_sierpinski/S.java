@@ -1,3 +1,5 @@
+package edu.cs56.projects.discretemath.towers_sierpinski;
+
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
@@ -14,13 +16,18 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-
+import javax.swing.*;
+import java.awt.event.*;
+/**
+   @author Jacob Anderson, Gordon Cheung
+   @version CS56, S13
+*/
 
 public class S extends JPanel{
 
 
     private int width=1200;
-    private int height = 900;
+    private int height = 800;
     
 
     int numberOfT=0;
@@ -28,8 +35,16 @@ public class S extends JPanel{
     public int getWidth(){ return this.width;}
     public int getHeight(){ return this.height;}
     
+    private boolean printMessage=false;
     
-    
+    /**
+      method to draw ellipse from the center. 
+      @param x the x component of the original ellipse
+      @param y the y component of the original ellipse
+      @param width width of the ellipse
+      @param height height of the ellipse
+
+     */
     
     public Ellipse2D centerOfDisk(double x, double y, double width, double height)//code to place from center of ellipse rather than from topleft
     {
@@ -40,6 +55,14 @@ public class S extends JPanel{
 
         return newDisk;
     }
+
+    /**
+       draws the towers based off of the top of the depth0 triangle
+       @param startX x coordinate of the top of the depth0 triangle
+       @param startY y coordinate of the top of the dpeth 0 triangle
+       @param sideLength length of a side of the triangle
+       @param g the graphics
+     */
     
     public void drawTowers(double startX, double startY, double sideLength, Graphics g){
 	//startX and startY are both based off of the bottom left of the towers
@@ -53,6 +76,18 @@ public class S extends JPanel{
     }
     
     
+
+    /**
+       draws the towers and disks
+       @param depth the number of disks-1
+       @param colors an arraylist of the colors that the disks should be
+       @param lefttopright the string of the current location of the top of depth0 triangle
+       @param g graphics
+       @param tx the x coordinate of the top of the current triangle
+       @param ty the y coordinate of the top of the current triangle
+       @param sideLength the length of a side of the triangle
+
+     */
     public void drawSystem(int depth, ArrayList<Color> colors, String lefttopright, Graphics g, double tx, double ty, double sideLength){
 	if(depth!=0){
 	    return;
@@ -73,7 +108,6 @@ public class S extends JPanel{
 	
 
 	
-	//int i =0;
 	double tW = sL;
 	double tH = 1.5*sL/4;
 	double eH = Math.min(tH/(n+1),20);
@@ -84,59 +118,11 @@ public class S extends JPanel{
 	double rcX = tx + x;
 	double rcY = ty+y*1.1;
 	
-	/*
-	  for(int r = 0; r<lefttopright.length();r++){
-	  
-	  if(r==lefttopright.length()-1 && lefttopright.charAt(r)!='T'){
-	  System.out.println("everasdsad= "+lefttopright);
-	  lcY+=y/2;
-	  rcY+=y/2;
-	  break block;
-	  }
-	  else if(lefttopright.charAt(r)=='T')break;
-	  else if(lefttopright.charAt(r)!='T'){
-	  System.out.println("everytime= "+lefttopright);
-	  //break;
-    }
-	  
-    }
-	*/
-	/* save for lefttopright.length() == 1
-	   if(lefttopright.charAt(q)=='L'){
-	   System.out.println("Any L's= " + lefttopright);
-	   lcX -= 1.5*x;
-	   tcX -= 1.5*x;
-	   }
-	   else if(lefttopright.charAt(q)=='R'){
-	   rcX += 1.5*x;
-	   tcX += 1.5*x;
-	   }
-	   
-	   else if(lefttopright.charAt(q)=='T' && q==0){
-	   lcX -= .75*x;
-	   rcX += .75*x;
-	   }
-	   else if(lefttopright.charAt(q)=='T' && q!=0){
-	   lcX -= .75*x;
-	   rcX += .75*x;
-	   
-	   if(lefttopright.charAt(q-1)=='L'){
-	   lcX -=1.5*x;
-	   }
-	   else if(lefttopright.charAt(q-1)=='R'){
-	   rcX +=1.5*x;
-	   }
-	   
-	   }
-	*/
-	
+		
 	if(lefttopright.length()==0){
-	    System.out.println("hihi");
 	}
 	else{
 	    block:{
-		
-		//for(int q = 0; q<lefttopright.length();q++){
 		
 		if(lefttopright.charAt(0)=='T'){
 		    if(lefttopright.charAt(lefttopright.length()-1)=='L'){
@@ -402,7 +388,6 @@ public class S extends JPanel{
 			    
 			}
 
-			//g2d.fill(new Ellipse2D.Double(p[j].x-tW/2+d*tW/3, p[j].y-eH*disks[d],newWidth/3,eH));
 		    }
 		    
 		    disks[d]++;
@@ -446,7 +431,6 @@ public class S extends JPanel{
 		    g2d.setColor(colors.get(0));
 		    Ellipse2D disk2 = centerOfDisk(p[j].x-tW/2+tW/2, p[j].y-eH*disks[d]+eH/2,newWidth/3,eH);
 		    g2d.fill(disk2);
-		    //g2d.fill(new Ellipse2D.Double(p[j].x-tW/2+d*tW/3, p[j].y-eH*disks[d],newWidth/3,eH));
 		    g2d.setColor(Color.BLACK);
 		    if(lefttopright.length()==0)
 			g2d.drawString(""+0,(float)(p[j].x-tW/2+tW/2),(float)(p[j].y-eH*(disks[d]-1)));
@@ -460,11 +444,8 @@ public class S extends JPanel{
 		    g2d.setFont(eF);
 		    for (int j = 0; j < 3; j++){
 			int d = Integer.parseInt(h[j]);
-			//if(p[j].x == p[1].x)System.out.println("ever");
-			//if(p[j].x > tcX){
 			g2d.setColor(colors.get(0));
 			
-			//Ellipse2D disk2 = centerOfDisk(p[j].x-tW/2+d*tW/3, p[j].y-eH*disks[d]+eH/2,newWidth/3,eH);
 			Ellipse2D disk2 = centerOfDisk(p[j].x, p[j].y-eH*disks[d]+eH/2,newWidth/3,eH);
 
 			g2d.fill(new Ellipse2D.Double(p[j].x-newWidth/3/2-newWidth/2+d*newWidth/2, p[j].y-eH*disks[d],newWidth/3,eH));
@@ -477,7 +458,6 @@ public class S extends JPanel{
 			    g2d.setFont(font);
 			}
 			
-			//g2d.fill(new Ellipse2D.Double(p[j].x-tW/2+d*tW/3, p[j].y-eH*disks[d],newWidth/3,eH));
 			g2d.setColor(Color.BLACK);
 			g2d.drawString(""+0,(float)(p[j].x-newWidth/2-newWidth/2+newWidth/2+d*newWidth/2),(float)(p[j].y-eH*(disks[d]-1)));
 			
@@ -500,6 +480,13 @@ public class S extends JPanel{
     private double tS, hS;
     private Font mF, eF;
 
+    /**
+       constructor
+
+       @param n the number of disks -1
+       
+     */
+
     public S(int n /*, double width, double height*/){
 	this.n=n;
 	/*
@@ -508,7 +495,7 @@ public class S extends JPanel{
 	  setSize(width,height);
 	  double min = Math.min(width,height); //wrong got bored
 	*/
-	side=700;
+	side=600;
 	sL=side/(Math.pow(2,n+1)-1);
 	colors = new ArrayList<Color>();
 	for (int i=0;i<n+1;i++){
@@ -523,6 +510,16 @@ public class S extends JPanel{
 	eF=mF;
     }
 
+    
+
+    /**
+       draws a single triangle
+       @param g graphics
+       @param depth the # of disks -1
+       @param tX the x coordinate of the top of the current triangle
+       @param tY the y coordinate of the top of the current triangle
+       @param order a string that represent the location of the top of the current triangle
+     */
     public void drawMove(Graphics g, int depth, double tX, double tY, String order){
 	//order stuff
 	String base = "01,02,12";
@@ -571,7 +568,6 @@ public class S extends JPanel{
 	else{
 	    mF = new Font("Arial", Font.BOLD,(int) Math.sqrt(sL));
 	    g2.setFont(mF);
-	    System.out.println("SL is: "+sL);
 	}
 	
 	
@@ -588,8 +584,16 @@ public class S extends JPanel{
 	drawSystem(depth,colors,order,g,tX,tY,sL);
     }
 
+    /**
+       calls drawMove to draw Sierpinski's Triangle
+       @param g graphics
+       @param depth the number of disks-1
+       @param topX the x coordinate of the top of the current triangle
+       @param topY the y coordinate of the top of the current triangle
+       @param order a string to represent the location of each iteration
+     */
 
-    public void drawSerpienski(Graphics g, int depth, double topX, double topY, String order){
+    public void drawSierpinski(Graphics g, int depth, double topX, double topY, String order){
 
 	if(depth < 0) return;
 	//drawSystem(depth,colors,order,g,topX,topY,sL);
@@ -598,30 +602,61 @@ public class S extends JPanel{
 	double x = sL * Math.pow(2,depth) * Math.cos(Math.PI/3);
 	double y = sL * Math.pow(2,depth) * Math.sin(Math.PI/3);
 
-	drawSerpienski(g,depth-1, topX, topY, order+"T");
-	drawSerpienski(g,depth-1, topX-x,topY+y, order+"L");
-	drawSerpienski(g,depth-1, topX+x, topY+y, order+"R");
-	//System.out.println(order);
+	drawSierpinski(g,depth-1, topX, topY, order+"T");
+	drawSierpinski(g,depth-1, topX-x,topY+y, order+"L");
+	drawSierpinski(g,depth-1, topX+x, topY+y, order+"R");
 
     }
+    /** 
+	paint component method
+	@param g graphics
+    */
 
     public void paintComponent(Graphics g){
-	drawSerpienski(g, n, tx, ty, "");
+	drawSierpinski(g, n, tx, ty, "");
     }
 
-    public static void main(String[] args){
-	System.out.println("start");
-	JFrame f = new JFrame("yo");
-	//f.setContentPane(new Tester(Integer.parseInt(args[0])));
-	//S s = new S(6);
-	S s = new S(Integer.parseInt(args[0]));
-	JScrollPane jsp = new JScrollPane(s,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-	f.add(jsp);
-	//f.setContentPane(new S(4));
-	f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	f.setSize(1200,900);
-	f.setVisible(true);
 
+    /**
+       main
+       @param args the number of disks-1
+     */
+    public static void main(String[] args){
+	JFrame f = new JFrame("Sierpinski's Triangle with Towers of Hanoi");
+	if (args.length != 1){
+		System.err.println("Usage: java S numDisks");
+		System.exit(1);
+	}
+	int numDisks=Integer.parseInt(args[0]);
+	final S s = new S(numDisks-1);
+	final JButton png = new JButton("save png");
+	final JButton jpg = new JButton("save jpg");
+	png.addActionListener(new ActionListener(){
+		public void actionPerformed(ActionEvent e){
+			s.remove(jpg);
+			s.remove(png);
+			SaveImage.savePNG(s);
+			s.add(png);
+			s.add(jpg);
+		}
+	});
+	jpg.addActionListener(new ActionListener(){
+		public void actionPerformed(ActionEvent e){
+			s.remove(jpg);
+			s.remove(png);
+			SaveImage.saveJPG(s);
+			s.add(png);
+			s.add(jpg);
+		}
+	});
+	s.add(png);
+	s.add(jpg);
+	f.add(s);
+	System.out.println(f.getComponentCount());
+	f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	f.setSize(1200,800);
+	f.setVisible(true);
+	
     }
 
 
