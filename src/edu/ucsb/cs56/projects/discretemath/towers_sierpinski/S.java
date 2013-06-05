@@ -3,6 +3,7 @@ package edu.cs56.projects.discretemath.towers_sierpinski;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
+import java.awt.Dimension;
 import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -26,8 +27,8 @@ import java.awt.event.*;
 public class S extends JPanel{
 
 
-    private int width=1200;
-    private int height = 800;
+    private int width=2000;
+    private int height = 2000;
     
 
     int numberOfT=0;
@@ -613,9 +614,11 @@ public class S extends JPanel{
     */
 
     public void paintComponent(Graphics g){
+	super.paintComponent(g);
 	drawSierpinski(g, n, tx, ty, "");
     }
 
+ 
 
     /**
        main
@@ -651,7 +654,10 @@ public class S extends JPanel{
 	});
 	s.add(png);
 	s.add(jpg);
-	f.add(s);
+	s.setPreferredSize(new Dimension(2000,2000));
+	JScrollPane jsp = new JScrollPane(s, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+	f.add(jsp);
 	System.out.println(f.getComponentCount());
 	f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	f.setSize(1200,800);
