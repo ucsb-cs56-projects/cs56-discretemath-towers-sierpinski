@@ -1,33 +1,37 @@
 <project default="compile">
 
-  <!-- build.xml for SierpinkskiTriangle-ColorPicker, S13, CS56
-       author: Will Mateer -->
-
-
-   <property environment="env"/> <!-- load the environment variables --> 
-   <property name="myPackage" value="edu.cs56.projects.discretemath.towers_sierpinski" />
-   <property name="CurrentDir" value="." />
-   <property name="webRoot" value="${env.HOME}/public_html/cs56" />
-   <property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56" />
-   <property name="projectName" value="project_ColorPicker" /> 
-   <property name="javadocDest" value="${webRoot}/${projectName}/javadoc" /> 
-   <property name="javadocURL" value="${webBaseURL}/${projectName}/javadoc" /> 
-   <property name="javadocLink" value="http://java.sun.com/javase/7/docs/api/" />
-   <path id="project.class.path">
+  <!-- build.xml for Sierpinski's Triangle 
+       name: @@@ Gordon Cheung, Jacob Anderson @@@ -->
+  <property name="mainClass" value="S" />
+  <property environment="env"/> <!-- load the environment variables --> 
+  <property name="webRoot" value="${env.HOME}/public_html/cs56" />
+  <property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56" />
+  <property name="projectName" value="sierpinskitriangle" /> 
+  <property name="javadocDest" value="${webRoot}/${projectName}/javadoc" /> 
+  <property name="javadocURL" value="${webBaseURL}/${projectName}/javadoc" /> 
+  <path id="project.class.path">
          <pathelement location="build"/>
          <pathelement location="lib/junit-4.8.2.jar"/>
    </path>   
 
-  <target name="compile" description="compile my code">
+
+  <target name="compile" >  
     <mkdir dir="build" />
-    <javac srcdir="src" destdir="build" debug="true" debuglevel="lines,source" 
-	   includeantruntime="false" >
-      <classpath refid="project.class.path" />
-    </javac>
+    <javac srcdir="src" destdir="build" debug="true" debuglevel="lines,source" includeantruntime="false">                                                                 <classpath>                                                                
+      <pathelement location="build"/>
+      <pathelement location="lib/junit-4.8.2.jar"/>               
+    </classpath>                                                                     </javac>       
+ </target>
+
+ <target name="clean" description="delete unnecessary files and directories">
+    <delete dir="build" failonerror="false" verbose="true" />
+    <mkdir dir="build" />
+    <delete dir="javadoc" failonerror="false" verbose="true" />  <!-- the local copy -->
+    <mkdir dir="javadoc" />
   </target>
 
 
- <target name="javadoc" depends="compile" description="publish javadoc"> 
+<target name="javadoc" depends="compile" description="publish javadoc"> 
    <delete dir="javadoc" quiet="true" /> 
    <javadoc  destdir="javadoc" author="true" version="true" use="true" >
      <fileset dir="src" includes="**/*.java"/>
@@ -55,33 +59,44 @@
  </target>        
 
 
- <target name="test" depends="compile" description="run junit tests">
+<target name="test" depends="compile">
 
-   <junit haltonerror="no" haltonfailure="no">
-       <classpath refid="project.class.path" />
+    <junit haltonerror="no" haltonfailure="no">
+       <classpath>
+         <pathelement location="lib/junit-4.8.2.jar"/>
+         <pathelement location="build"/>
+       </classpath>
 
        <batchtest fork="yes">
           <fileset dir="src">
             <!-- this will pick up every class with a name ending in Test -->
-            <include name="**/*Test.java"/>
+            <include name="*Test.java"/>
           </fileset>
        </batchtest>
 
         <formatter type="plain" usefile="false" /> 
        
-   </junit>
+    </junit>
   </target>
 
-  <target name="clean" description="delete unnecessary files and directories">
-    <delete dir="build" failonerror="false" verbose="true" />
-    <mkdir dir="build" />
-    <delete dir="javadoc" failonerror="false" verbose="true" />  <!-- the local copy -->
-    <mkdir dir="javadoc" />
+ <target name="help" depends="compile" description="tells user how to run the class ${mainClass}">
+    <echo>
+To run the program, type these commands:
+   ant -D#=arg run
+arg should be an integer greater than or equal to 1
+   </echo>
   </target>
 
-  <target name="run" depends="compile" description="run ColorPickRunner from src subdirectory">
+<target name="run" depends="compile" description="runs the class ${mainClass} with arg # refer to ant help">
+    <java fork="true" classname="edu.cs56.projects.discretemath.towers_sierpinski.${mainClass}" classpath="build">
+    <arg line = "${#}"/>
+    </java>
+  </target>
+
+<target name="EX_GUI" depends="compile" description="run an example of ColorPickRunner main">
     <java fork="true" classpathref="project.class.path" 
-	  classname="${myPackage}.ColorPickRunner" />
+	  classname="edu.cs56.projects.discretemath.towers_sierpinski.ColorPickRunner" />
   </target>
+  <!-- added by Will Mateer, to demonstrate an instance of the colorpicker before it is added to the main program.-->
 
-</project>
+  </project>
