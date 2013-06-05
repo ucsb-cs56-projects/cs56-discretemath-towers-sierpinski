@@ -79,15 +79,12 @@
     </junit>
   </target>
 
- <target name="help" depends="compile" description="tells user how to run the class ${mainClass}">
-    <echo>
+<target name="run" depends="compile" description="runs the class ${mainClass} with arg #">
+<echo>
 To run the program, type these commands:
    ant -D#=arg run
 arg should be an integer greater than or equal to 1
    </echo>
-  </target>
-
-<target name="run" depends="compile" description="runs the class ${mainClass} with arg # refer to ant help">
     <java fork="true" classname="edu.cs56.projects.discretemath.towers_sierpinski.${mainClass}" classpath="build">
     <arg line = "${#}"/>
     </java>
