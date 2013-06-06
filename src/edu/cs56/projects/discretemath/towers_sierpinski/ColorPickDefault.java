@@ -3,7 +3,7 @@ package edu.cs56.projects.discretemath.towers_sierpinski;
 import java.io.*;
 import java.util.Properties;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 import java.util.Collections;
 
 import javax.swing.JOptionPane;
@@ -29,7 +29,7 @@ public class ColorPickDefault {
 	private Map<String,ArrayList<Color>> CustomColorList; //Maybe change to map.  The list of all the available "default" color schemes.
 	private Map<String,ArrayList<Color>> UserChoicesToSave; //Possibly unnecessary.  Acts as buffer to be saved. Different from the total map.
 	private ArrayList<Color> ChosenColorList; //Current choice of ColorList.  Would be sent to props file/maybe added to defaults/
-	private Arraylist<Color> TmpList; // maybe unnecessary, but acts as a tmp transfer list for getting from a runner instance.
+	private ArrayList<Color> TmpList; // maybe unnecessary, but acts as a tmp transfer list for getting from a runner instance.
 	private boolean open; //boolean to tell parent prog whether it is open or not.
 	private JComboBox ComboChoices; //ComboBox gui for default. Is added to if CustomColorList is added to. Reflects CustomColorList.
     
@@ -40,9 +40,16 @@ public class ColorPickDefault {
 		
 		frame = new JFrame("Default Color Choices For Sierpinski Triangles");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//CustomColorList = new Map(<String>,<ArrayList<Color>>)();//DUNNO IF CORRECT. FIXIXIIXI
-		//CustomColorList = CreateDefaultChoices(); //NEED TO IMPLEMENT METHOD
-		//ChosenColorList = FIRST DEFAULT OPTION FOR CustomColorList//NEED TO IMPLEMENT BASED ON DEFAULT SCHEMES
+		CustomColorList = new HashMap<String,ArrayList<Color>>();//DUNNO IF CORRECT. FIXIXIIXI
+		
+		UserChoicesToSave = new HashMap<String,ArrayList<Color>>();
+		SaveNewDefaultViaSerializable();
+
+		CreateDefaultChoices();
+		
+		ChosenColorList = new ArrayList<Color>(); // FIRST DEFAULT OPTION FOR CustomColorList//NEED TO IMPLEMENT BASED ON DEFAULT SCHEMES
+		
+		
 		open = true;
 		
 		//TITLE
@@ -63,8 +70,9 @@ public class ColorPickDefault {
 		UpdateTextWithChosenColor(); //USE UPDATE METHOD, also updates everytime ChosenColorList changes.
 		
 		//COMBOBOX, needs to be set to reflect changes in CustomColorList...
-		ComboChoices = new JComboBox(SetChoices());
-		ComboChoices.setSelectedIndex(0);
+		ComboChoices = new JComboBox();
+		//ComboChoices.setSelectedIndex(0);
+		UpdateChoiceBox();
 		ComboChoices.addActionListener(new ChoiceComboListener());
 		//USE UPDATE METHOD
 		
@@ -89,9 +97,10 @@ public class ColorPickDefault {
         MainPanel.add(banner, BorderLayout.NORTH);
 		MainPanel.add(CustomButton, BorderLayout.EAST);
 		MainPanel.add(ExitButton, BorderLayout.WEST);
-		MainPanel.add(PreviewButton, BorderLayout.PAGE_END);
+		MainPanel.add(PreviewButton, BorderLayout.SOUTH);
 		
 		frame.add(MainPanel);
+		frame.add(ComboChoices,BorderLayout.NORTH);
 		frame.pack();
         frame.setVisible(true);
 	}
@@ -106,9 +115,10 @@ public class ColorPickDefault {
 	
 	class ChoiceComboListener implements ActionListener {
 		public void actionPerformed(ActionEvent event){
-			JComboBox tmpCB = (JComboBox)ComboChoices.getSource();
-			ArrayList ColorTmpCB = (ArrayList)cb.getSelectedItem();
-			ChosenColorList = ColorTmpCB;
+			//JComboBox tmpCB = (JComboBox)ComboChoices.getSource();
+			String ColorTmpCB = (String)ComboChoices.getSelectedItem();
+			ChosenColorList = CustomColorList.get(ColorTmpCB);
+
 			UpdateTextWithChosenColor(); //SEPARTE METHOD TO UPDATE COLOR LABEL WITH COLOR IN CURRENT LIST CHOSEN
 		}
 	}
@@ -193,6 +203,7 @@ public class ColorPickDefault {
 	
 	class PreviewListener implements ActionListener {
 		public void actionPerformed(ActionEvent event){
+			open = true;
 			//DISPLAY EXTRA JFRAME, with preview of current chosen color scheme in order, by showing a box/checkbox/list??? idk yet. NOT YET CONSIDERED
 			
 		}
@@ -243,7 +254,7 @@ public class ColorPickDefault {
 	private void UpdateChoiceBox() { //Directly resets and updates ComboChoices Dialog box.
 		ComboChoices.removeAllItems();
 		
-		for (Map.Entry<String, ArrayList<Color>> entry : map.entrySet()) //USE CustomColorList...????
+		for (Map.Entry<String, ArrayList<Color>> entry : CustomColorList.entrySet()) //USE CustomColorList...????
 		{
 			ComboChoices.addItem(entry.getKey());
 			//System.out.println(entry.getKey() + "/" + entry.getValue());
@@ -278,8 +289,9 @@ public class ColorPickDefault {
 			prop.store(Output, "Colors Saved by an instance of ColorPickRunner");
 			Output.flush();
 			Output.close();
-			
-    	} catch (IOException ex) {
+		} 
+		
+		catch (IOException ex) {
     		ex.printStackTrace();
         }
 	}
@@ -293,11 +305,11 @@ public class ColorPickDefault {
 		
 			//also checks if there are duplicates, cant have same names, but can have same schemes.
 		try {
-			FileInputStream fileStream = new FileInputStream("Saved_Default.ser");
+			FileInputStream fileStream = new FileInputStream("build/Saved_Default.ser");
 			ObjectInputStream inputStream = new ObjectInputStream(fileStream);
 			Object UserDefaults = inputStream.readObject();
 			Map<String,ArrayList<Color>> TmpDefaults = (Map<String,ArrayList<Color>>) UserDefaults;
-			UserChoicesToSave.addAll(TmpDefaults);
+			UserChoicesToSave.putAll(TmpDefaults);
 			inputStream.close();
 		}
 		catch (Exception ex) {
@@ -309,7 +321,7 @@ public class ColorPickDefault {
 	private void SaveNewDefaultViaSerializable() { //Adds to the default colors provided and when called in option box of ColorRunner.close()
 		//if (UserChoicesToSave != null) {
 			try{
-				FileOutputStream fileStream = new FileOutputStream("Saved_Default.ser");
+				FileOutputStream fileStream = new FileOutputStream("build/Saved_Default.ser");
 				ObjectOutputStream outStream = new ObjectOutputStream(fileStream);
 				outStream.writeObject(UserChoicesToSave);
 				outStream.close();
