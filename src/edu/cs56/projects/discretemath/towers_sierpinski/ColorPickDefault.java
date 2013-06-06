@@ -3,6 +3,11 @@ package edu.cs56.projects.discretemath.towers_sierpinski;
 import java.io.*;
 import java.util.Properties;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Collections;
+
+import javax.swing.JOptionPane;
+import javax.swing.JDialog;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -15,7 +20,7 @@ import javax.swing.colorchooser.*;
 */
 public class ColorPickDefault {
 
-	private ColorPickRunner ColorRunner; //needed
+	private ColorPickRunner ColorRun; //needed
     protected JLabel banner; //Displays written "Objective"?
 	private JFrame frame; //main frame
 	private JPanel TextPanel; //panel to hold Scroll area with written color hexes
@@ -35,9 +40,9 @@ public class ColorPickDefault {
 		
 		frame = new JFrame("Default Color Choices For Sierpinski Triangles");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		CustomColorList = new Map(<String>,ArrayList<Color>);//DUNNO IF CORRECT.
-		CustomColorList = CreateDefaultChoices(); //NEED TO IMPLEMENT METHOD
-		ChosenColorList = FIRST DEFAULT OPTION FOR CustomColorList//NEED TO IMPLEMENT BASED ON DEFAULT SCHEMES
+		//CustomColorList = new Map(<String>,<ArrayList<Color>>)();//DUNNO IF CORRECT. FIXIXIIXI
+		//CustomColorList = CreateDefaultChoices(); //NEED TO IMPLEMENT METHOD
+		//ChosenColorList = FIRST DEFAULT OPTION FOR CustomColorList//NEED TO IMPLEMENT BASED ON DEFAULT SCHEMES
 		open = true;
 		
 		//TITLE
@@ -60,7 +65,7 @@ public class ColorPickDefault {
 		//COMBOBOX, needs to be set to reflect changes in CustomColorList...
 		ComboChoices = new JComboBox(SetChoices());
 		ComboChoices.setSelectedIndex(0);
-		ComboChoices.addActionListener(ChoiceComboListener);
+		ComboChoices.addActionListener(new ChoiceComboListener());
 		//USE UPDATE METHOD
 		
 		//ADD BUTTON AT BOTTOM OF PICKER PANEL TO CONFIRM A COLOR CHOICE
@@ -101,16 +106,16 @@ public class ColorPickDefault {
 	
 	class ChoiceComboListener implements ActionListener {
 		public void actionPerformed(ActionEvent event){
-			JComboBox tmpCB = (JComboBox)e.getSource();
+			JComboBox tmpCB = (JComboBox)ComboChoices.getSource();
 			ArrayList ColorTmpCB = (ArrayList)cb.getSelectedItem();
 			ChosenColorList = ColorTmpCB;
-			UpdateColo //SEPARTE METHOD TO UPDATE COLOR LABEL WITH COLOR IN CURRENT LIST CHOSEN
+			UpdateTextWithChosenColor(); //SEPARTE METHOD TO UPDATE COLOR LABEL WITH COLOR IN CURRENT LIST CHOSEN
 		}
 	}
 	
 	class CustomListener implements ActionListener { //ALMOST DONE WITH METHOD
 		public void actionPerformed(ActionEvent event){
-			Arraylist <Color> TmpList; //.add(new Color(0,0,0));
+			//Arraylist <Color> TmpList; //.add(new Color(0,0,0));
 			
 			final Runnable Linker = new Runnable() {
 				public void run() {
@@ -133,7 +138,7 @@ public class ColorPickDefault {
 						e.printStackTrace();
 					}
 					finally {
-						JFrame tmpFrame = new JFrame();
+						/*JFrame tmpFrame = new JFrame();
 						tmpFrame.setVisible(true);
 						TmpList = ColorRun.returnColorList();
 						//ADD TMP LIST TO CURRENT DEFAULT CHOICES OR CONFIRM AS COLOR CHOICE PROMPT
@@ -144,9 +149,9 @@ public class ColorPickDefault {
 						int n = JOptionPane.CLOSED_OPTION;
 						String Choice = null;
 						
-						while (n==JOptionPane.CLOSED_OPTION)) {
-							n = JOptionPane.showConfirmDialog(tmpFrame,"Would you like to save your choice and continue browsing or \n
-															  would you like to confirm as your final choice and not save?","Custom Color Chooser",
+						while (n == JOptionPane.CLOSED_OPTION) {
+							n = JOptionPane.showConfirmDialog(tmpFrame,"Would you like to save your choice and continue browsing or would 
+															  you like to confirm as your final choice and not save?","Custom Color Chooser",
 															  JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,options[0]);
 						}
 						if(n == JOptionPane.YES_OPTION) {
@@ -154,7 +159,7 @@ public class ColorPickDefault {
 								Choice = (String)JOptionPane.showInputDialog(tmpFrame,"Choose a Name for the Custom Color Scheme","Custom Color Chooser",
 																	   JOptionPane.PLAIN_MESSAGE,null,null,"PLACEHOLDER");
 								if (CustomColorList.containsKey(Choice) == true) {
-									Choice == null;
+									Choice = null;
 								}
 							}
 							//ADD CHOICE AND CHOSEN COLOR LIST TO MAP
@@ -175,9 +180,9 @@ public class ColorPickDefault {
 							ChosenColorList = TmpList;//NEED TO FIX ALL
 							frame.setVisible(false);
 							WriteToPropertiesFile();
-							SaveNewDefaultViaSerializable()
+							SaveNewDefaultViaSerializable();
 							frame.dispose();
-						}
+						}*/
 						
 					}
 				}
