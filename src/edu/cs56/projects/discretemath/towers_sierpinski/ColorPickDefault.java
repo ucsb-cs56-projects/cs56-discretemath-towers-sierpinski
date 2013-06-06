@@ -63,6 +63,7 @@ public class ColorPickDefault {
 		TextPanel = new JPanel(new BorderLayout());
 		text = new JTextArea(10,30);
 		text.setLineWrap(true);
+		text.setEditable(false);
 		JScrollPane scroller = new JScrollPane(text);
 		scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -148,10 +149,8 @@ public class ColorPickDefault {
 						e.printStackTrace();
 					}
 					finally {
-						/*JFrame tmpFrame = new JFrame();
-						tmpFrame.setVisible(true);
+						
 						TmpList = ColorRun.returnColorList();
-						//ADD TMP LIST TO CURRENT DEFAULT CHOICES OR CONFIRM AS COLOR CHOICE PROMPT
 							
 						//PROMPT/OPTIONBOX...ALMOST DONE
 						
@@ -160,13 +159,12 @@ public class ColorPickDefault {
 						String Choice = null;
 						
 						while (n == JOptionPane.CLOSED_OPTION) {
-							n = JOptionPane.showConfirmDialog(tmpFrame,"Would you like to save your choice and continue browsing or would 
-															  you like to confirm as your final choice and not save?","Custom Color Chooser",
-															  JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,options[0]);
+							n = JOptionPane.showOptionDialog(null, "Would you like to save your choice and continue browsing or would you like to confirm as your final choice",
+															  "Custom Color Chooser", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 						}
 						if(n == JOptionPane.YES_OPTION) {
 							while (Choice == null) {
-								Choice = (String)JOptionPane.showInputDialog(tmpFrame,"Choose a Name for the Custom Color Scheme","Custom Color Chooser",
+								Choice = (String)JOptionPane.showInputDialog(null,"Choose a Name for the Custom Color Scheme","Custom Color Chooser",
 																	   JOptionPane.PLAIN_MESSAGE,null,null,"PLACEHOLDER");
 								if (CustomColorList.containsKey(Choice) == true) {
 									Choice = null;
@@ -176,14 +174,16 @@ public class ColorPickDefault {
 							//Close Runner Frame but not default frame, add to CustomColorList,
 							//and UserChoicesToSave, Also UpdateTextWithChosenColor() is called);
 							
-							CustomColorList.add(TmpList);//? NEED TO FIX ALL THIS, MAINFRAME IN PLACE
+							//? NEED TO FIX ALL THIS, MAINFRAME IN PLACE
 							ChosenColorList = TmpList;
-							UserChoicesToSave.put(ChosenColorList);
+							CustomColorList.put(Choice, ChosenColorList);
+							UserChoicesToSave.put(Choice, ChosenColorList);
 							UpdateTextWithChosenColor();
+							UpdateChoiceBox();
 							SaveNewDefaultViaSerializable();
 						}
 						
-						else if(n == JOptionPane.NO_OPTION){
+						else if(n == JOptionPane.NO_OPTION) {
 							//(Close down and save color choice, do not add, Save Via Properties, 
 							//Also make attempt to call SaveViaSerialzable to save other possible schemes)
 								
@@ -192,7 +192,7 @@ public class ColorPickDefault {
 							WriteToPropertiesFile();
 							SaveNewDefaultViaSerializable();
 							frame.dispose();
-						}*/
+						}
 						
 					}
 				}
@@ -203,9 +203,42 @@ public class ColorPickDefault {
 	
 	class PreviewListener implements ActionListener {
 		public void actionPerformed(ActionEvent event){
-			open = true;
-			//DISPLAY EXTRA JFRAME, with preview of current chosen color scheme in order, by showing a box/checkbox/list??? idk yet. NOT YET CONSIDERED
 			
+			final Runnable Linker = new Runnable() {
+				public void run() {
+					JFrame PreviewFrame = new JFrame();
+					PreviewFrame.setSize(30*ChosenColorList.size(),200);
+					PreviewPanel Prev = new PreviewPanel();
+					PreviewFrame.add(Prev);
+					PreviewFrame.setVisible(true);
+				}
+			};
+				
+			Thread LinkThread = new Thread() {
+				public void run() {
+					try {
+						synchronized (this) {
+							SwingUtilities.invokeAndWait(Linker);
+							
+						}
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			};
+			LinkThread.start();
+		}
+
+	}
+	
+	class PreviewPanel extends JPanel{
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			for (int i=0; i<ChosenColorList.size(); i++) {
+				g.setColor(ChosenColorList.get(i));
+				g.fillRect(30*i, 0, 30, 200);
+			}
 		}
 	}
 	
@@ -221,7 +254,6 @@ public class ColorPickDefault {
 			WriteToPropertiesFile();
 			SaveNewDefaultViaSerializable();
 			frame.dispose();
-			//returnColorList();
 		}
 		
 	}
@@ -253,11 +285,11 @@ public class ColorPickDefault {
 	
 	private void UpdateChoiceBox() { //Directly resets and updates ComboChoices Dialog box.
 		ComboChoices.removeAllItems();
+		CreateDefaultChoices();
 		
 		for (Map.Entry<String, ArrayList<Color>> entry : CustomColorList.entrySet()) //USE CustomColorList...????
 		{
 			ComboChoices.addItem(entry.getKey());
-			//System.out.println(entry.getKey() + "/" + entry.getValue());
 		}
 	}
 	
@@ -308,8 +340,9 @@ public class ColorPickDefault {
 			FileInputStream fileStream = new FileInputStream("build/Saved_Default.ser");
 			ObjectInputStream inputStream = new ObjectInputStream(fileStream);
 			Object UserDefaults = inputStream.readObject();
-			Map<String,ArrayList<Color>> TmpDefaults = (Map<String,ArrayList<Color>>) UserDefaults;
+			Map<String,ArrayList<Color>> TmpDefaults = (HashMap<String,ArrayList<Color>>) UserDefaults; //HASH>>>>????
 			UserChoicesToSave.putAll(TmpDefaults);
+			//CustomColorList.putAll(UserChoicesToSave);
 			inputStream.close();
 		}
 		catch (Exception ex) {
