@@ -1,7 +1,6 @@
 package edu.cs56.projects.discretemath.towers_sierpinski;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Properties;
 import java.util.ArrayList;
 
@@ -14,7 +13,7 @@ import javax.swing.colorchooser.*;
 /**
  Parent Frame class that makes instances of ColorPickRunner or displays default color schemes to choose from.
 */
-public class ColorPickRunner {
+public class ColorPickDefault {
 
 	private ColorPickRunner ColorRunner; //needed
     protected JLabel banner; //Displays written "Objective"?
@@ -23,7 +22,7 @@ public class ColorPickRunner {
 	private JPanel MainPanel; // Panel to add buttons and banner to
 	private JTextArea text; //main display of current chosen colors in hex form? (not like preview panel made by button)
 	private Map<String,ArrayList<Color>> CustomColorList; //Maybe change to map.  The list of all the available "default" color schemes.
-	private List<ArrayList<Color>> UserChoicesToSave; //Possibly unnecessary.  Acts as buffer to be saved. Different from the total map.
+	private Map<String,ArrayList<Color>> UserChoicesToSave; //Possibly unnecessary.  Acts as buffer to be saved. Different from the total map.
 	private ArrayList<Color> ChosenColorList; //Current choice of ColorList.  Would be sent to props file/maybe added to defaults/
 	private Arraylist<Color> TmpList; // maybe unnecessary, but acts as a tmp transfer list for getting from a runner instance.
 	private boolean open; //boolean to tell parent prog whether it is open or not.
@@ -56,7 +55,7 @@ public class ColorPickRunner {
 		scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		TextPanel.add(scroller);
-		//USE UPDATE METHOD, also updates everytime ChosenColorList changes.
+		UpdateTextWithChosenColor(); //USE UPDATE METHOD, also updates everytime ChosenColorList changes.
 		
 		//COMBOBOX, needs to be set to reflect changes in CustomColorList...
 		ComboChoices = new JComboBox(SetChoices());
@@ -105,13 +104,13 @@ public class ColorPickRunner {
 			JComboBox tmpCB = (JComboBox)e.getSource();
 			ArrayList ColorTmpCB = (ArrayList)cb.getSelectedItem();
 			ChosenColorList = ColorTmpCB;
-			UPDATECOLORLISTLABELWITHCOLORS() //SEPARTE METHOD TO UPDATE COLOR LABEL WITH COLOR IN CURRENT LIST CHOSEN
+			UpdateColo //SEPARTE METHOD TO UPDATE COLOR LABEL WITH COLOR IN CURRENT LIST CHOSEN
 		}
 	}
 	
-	class CustomListener implements ActionListener {
+	class CustomListener implements ActionListener { //ALMOST DONE WITH METHOD
 		public void actionPerformed(ActionEvent event){
-			TmpList.add(new Color(0,0,0));
+			Arraylist <Color> TmpList; //.add(new Color(0,0,0));
 			
 			final Runnable Linker = new Runnable() {
 				public void run() {
@@ -134,24 +133,52 @@ public class ColorPickRunner {
 						e.printStackTrace();
 					}
 					finally {
-							TmpList = ColorRun.returnColorList();
-							//ADD TMP LIST TO CURRENT DEFAULT CHOICES OR CONFIRM AS COLOR CHOICE PROMPT
+						JFrame tmpFrame = new JFrame();
+						tmpFrame.setVisible(true);
+						TmpList = ColorRun.returnColorList();
+						//ADD TMP LIST TO CURRENT DEFAULT CHOICES OR CONFIRM AS COLOR CHOICE PROMPT
 							
-							PROMPT/OPTIONBOX...?>???
-							if add then
-								CustomColorList.add(TmpList);
-								ChosenColorList = TmpList;
-								//ALSO UPDATE COMBO CHOOSER WITH NEW CHOICE
-								UpdateLabelWithChosenColor();
-								//SCROLLBOXXXtext.append(Integer.toString(CurrentColor) +".) "+ TmpCol.toString() + "\n");
-								CurrentColor++;
+						//PROMPT/OPTIONBOX...ALMOST DONE
+						
+						Object[] options = {"Save & Continue","Export & Exit"};
+						int n = JOptionPane.CLOSED_OPTION;
+						String Choice = null;
+						
+						while (n==JOptionPane.CLOSED_OPTION)) {
+							n = JOptionPane.showConfirmDialog(tmpFrame,"Would you like to save your choice and continue browsing or \n
+															  would you like to confirm as your final choice and not save?","Custom Color Chooser",
+															  JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,options[0]);
+						}
+						if(n == JOptionPane.YES_OPTION) {
+							while (Choice == null) {
+								Choice = (String)JOptionPane.showInputDialog(tmpFrame,"Choose a Name for the Custom Color Scheme","Custom Color Chooser",
+																	   JOptionPane.PLAIN_MESSAGE,null,null,"PLACEHOLDER");
+								if (CustomColorList.containsKey(Choice) == true) {
+									Choice == null;
+								}
+							}
+							//ADD CHOICE AND CHOSEN COLOR LIST TO MAP
+							//Close Runner Frame but not default frame, add to CustomColorList,
+							//and UserChoicesToSave, Also UpdateTextWithChosenColor() is called);
+							
+							CustomColorList.add(TmpList);//? NEED TO FIX ALL THIS, MAINFRAME IN PLACE
+							ChosenColorList = TmpList;
+							UserChoicesToSave.put(ChosenColorList);
+							UpdateTextWithChosenColor();
+							SaveNewDefaultViaSerializable();
+						}
+						
+						else if(n == JOptionPane.NO_OPTION){
+							//(Close down and save color choice, do not add, Save Via Properties, 
+							//Also make attempt to call SaveViaSerialzable to save other possible schemes)
 								
-							if confirm but not add
-								ChosenColorList = TmpList;
-								frame.setVisible(false);
-								WriteToPropertiesFile();
-								SaveNewDefaultViaSerializable()
-								frame.dispose();
+							ChosenColorList = TmpList;//NEED TO FIX ALL
+							frame.setVisible(false);
+							WriteToPropertiesFile();
+							SaveNewDefaultViaSerializable()
+							frame.dispose();
+						}
+						
 					}
 				}
 			};
@@ -161,7 +188,7 @@ public class ColorPickRunner {
 	
 	class PreviewListener implements ActionListener {
 		public void actionPerformed(ActionEvent event){
-			//DISPLAY EXTRA JFRAME, with preview of current chosen color scheme in order, by showing a box/checkbox/list??? idk yet.
+			//DISPLAY EXTRA JFRAME, with preview of current chosen color scheme in order, by showing a box/checkbox/list??? idk yet. NOT YET CONSIDERED
 			
 		}
 	}
@@ -183,52 +210,70 @@ public class ColorPickRunner {
 		
 	}
 	
-	private void CreateDefaultChoices() { //UNTESTED, can be hardcoded with new defaults.
-		ArrayList<Color> Rainbow = new ArrayList<Color>("","","","","");
-		ArrayList<Color> SpringTime = new ArrayList<Color>("","","","","");
-		ArrayList<Color> Winter = new ArrayList<Color>("","","","","");
-		ArrayList<Color> GrayScale = new ArrayList<Color>("","","","","");
-		ArrayList<Color> Purples = new ArrayList<Color>("","","","","");
+	private void CreateDefaultChoices() { //UNTESTED// NEED TO HARDCODE VALUES
+		ArrayList<Color> Rainbow = new ArrayList<Color>();
+		ArrayList<Color> SpringTime = new ArrayList<Color>();
+		ArrayList<Color> Winter = new ArrayList<Color>();
+		ArrayList<Color> GrayScale = new ArrayList<Color>();
+		ArrayList<Color> Purples = new ArrayList<Color>();
 		
-		CustomColorList.add("Rainbow",Rainbow);
-		CustomColorList.add("SpringTime",SpringTime);
-		CustomColorList.add("Winter",Winter);
-		CustomColorList.add("GrayScale",GrayScale);
-		CustomColorList.add("Purples",Purples);
+		Collections.addAll(Rainbow, new Color(255,0,0), new Color(255,153,51), new Color(255,255,0), new Color(51,204,0), new Color(0,0,255));
+		Collections.addAll(SpringTime, new Color(0,255,0), new Color(0,204,102), new Color(0,204,204), new Color(153,0,204), new Color(255,153,153));
+		Collections.addAll(Winter, new Color(255,0,51), new Color(0,153,51), new Color(0,0,204), new Color(0,255,255), new Color(204,204,204));
+		Collections.addAll(GrayScale, new Color(200,200,200), new Color(150,150,150), new Color(100,100,100), new Color(50,50,50), new Color(0,0,0));
+		Collections.addAll(Purples, new Color(255,102,255), new Color(255,0,255), new Color(204,0,204), new Color(153,0,153), new Color(51,0,51));
+		
+		
+		CustomColorList.put("Rainbow",Rainbow);
+		CustomColorList.put("SpringTime",SpringTime);
+		CustomColorList.put("Winter",Winter);
+		CustomColorList.put("GrayScale",GrayScale);
+		CustomColorList.put("Purples",Purples);
+		
+		//ADD USER DEFINED DEFAULTS
 		
 		CheckSavedUserDefinedSchemes();
 	}
 	
-	private String[] UpdateChoiceBox() {
-			go through keys in Map<String,Arraylist<Color>>
-			return list of those keys as the defintions of the schemes of the colors.
+	private void UpdateChoiceBox() { //Directly resets and updates ComboChoices Dialog box.
+		ComboChoices.removeAllItems();
+		
+		for (Map.Entry<String, ArrayList<Color>> entry : map.entrySet()) //USE CustomColorList...????
+		{
+			ComboChoices.addItem(entry.getKey());
+			//System.out.println(entry.getKey() + "/" + entry.getValue());
+		}
 	}
 	
-	private UpdateLabelWithChosenColor() { //goes through ChosenColorList and writes it to the text area, resets each time.
-		TextArea.set( go through ChosenColorList colors and print out each color -> hex/color(r,g,b);)
+	private void UpdateTextWithChosenColor() { //goes through ChosenColorList and writes it to the text area, resets each time.
+		text.setText("");
+		for (int i=0; i < ChosenColorList.size();i++)
+		{
+			Color TmpCol = ChosenColorList.get(i);
+			text.append(Integer.toString(i) + ".)" + TmpCol.toString() + "\n");
+		}
 	}
-	
-	
 	
 	/**
-	 Method that saves the chosen colors in the ColorList 
+	 Method that saves the chosen colors in the ChosenColorList 
 	 to a properties file in the build directory. //STAY THE SAME MOSTLY
 	*/
 	public void WriteToPropertiesFile(){
 		
 		Properties prop = new Properties();
     	try {
-			for (int i=0; i<ColorList.size(); i++) 
+			for (int i = 0; i < ChosenColorList.size(); i++) 
 			{
-				Color ColorToAdd = ColorList.get(i);
+				Color ColorToAdd = ChosenColorList.get(i);
 				String HexString = Integer.toHexString(ColorToAdd.getRGB());
 				String ColorName = "Color_" + Integer.toString(i);
 				prop.setProperty(ColorName, HexString); 
 			}
-			FileOutputStream Output = new FileOutputStream("build/ColorProperties");
+			FileOutputStream Output = new FileOutputStream("build/DefaultColorProperties");
 			prop.store(Output, "Colors Saved by an instance of ColorPickRunner");
 			Output.flush();
 			Output.close();
+			
     	} catch (IOException ex) {
     		ex.printStackTrace();
         }
@@ -237,38 +282,38 @@ public class ColorPickRunner {
 	private void CheckSavedUserDefinedSchemes() {
 			//checks the saved Serialzed obj file.
 		
-			//if there and has info, it adds to the CustomColorList. throught form of for loop, until end of file.
+			//if there and has info, it adds to the CustomColorList. through form of for loop, until end of file.
 			
 			//if nothing is there then does nothing.
 		
 			//also checks if there are duplicates, cant have same names, but can have same schemes.
+		try {
+			FileInputStream fileStream = new FileInputStream("Saved_Default.ser");
+			ObjectInputStream inputStream = new ObjectInputStream(fileStream);
+			Object UserDefaults = inputStream.readObject();
+			Map<String,ArrayList<Color>> TmpDefaults = (Map<String,ArrayList<Color>>) UserDefaults;
+			UserChoicesToSave.addAll(TmpDefaults);
+			inputStream.close();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 	
 	
 	private void SaveNewDefaultViaSerializable() { //Adds to the default colors provided and when called in option box of ColorRunner.close()
-		
-	}
-	
-	private savtoPropertiesFile() { //METHOD USED Just like in ColorRunner, needs to save the One list of Chosen colors at the close().
-		Properties prop = new Properties();
-    	try {
-			for (int i=0; i<ColorList.size(); i++) 
-			{
-				Color ColorToAdd = ColorList.get(i);
-				String HexString = Integer.toHexString(ColorToAdd.getRGB());
-				String ColorName = "Color_" + Integer.toString(i);
-				prop.setProperty(ColorName, HexString); 
+		//if (UserChoicesToSave != null) {
+			try{
+				FileOutputStream fileStream = new FileOutputStream("Saved_Default.ser");
+				ObjectOutputStream outStream = new ObjectOutputStream(fileStream);
+				outStream.writeObject(UserChoicesToSave);
+				outStream.close();
 			}
-			FileOutputStream Output = new FileOutputStream("build/ColorProperties");
-			prop.store(Output, "Colors Saved by an instance of ColorPickDefault");
-			Output.flush();
-			Output.close();
-    	} catch (IOException ex) {
-    		ex.printStackTrace();
-        }  //NEED TO FIX, ie change Props destination.
+			catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		//}
 	}
-	
-	
 	/**
 	 Method that works just like how ColorPickRunner.isOpen() works with this class
 	 This method can be used by a parent class call to determine if this window 
