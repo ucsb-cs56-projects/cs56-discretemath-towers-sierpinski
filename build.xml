@@ -99,4 +99,10 @@ arg should be an integer greater than or equal to 1
   </target>
   <!-- added by Will Mateer, to demonstrate an instance of the colorpicker before it is added to the main program.-->
 
+<target name="EX_DEF" depends="compile" description="run an example of ColorPickDefault main">
+    <java fork="true" classpathref="project.class.path" 
+	  classname="edu.cs56.projects.discretemath.towers_sierpinski.ColorPickDefault" />
+  </target>
+  <!-- added by Will Mateer, to demonstrate an instance of the extended colorpicker GUI before it is added to the main program.-->
+
   </project>
