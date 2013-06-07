@@ -43,7 +43,7 @@ public class ColorPickDefault {
 		CustomColorList = new HashMap<String,ArrayList<Color>>();
 		
 		UserChoicesToSave = new HashMap<String,ArrayList<Color>>();
-		SaveNewDefaultViaSerializable();
+		//SaveNewDefaultViaSerializable();
 
 		CreateDefaultChoices();
 		
@@ -52,7 +52,7 @@ public class ColorPickDefault {
 		open = true;
 		
 		//TITLE
-        banner = new JLabel("Choose a Color Scheme in the drop down menu.  You can preview the scheme or save your choice.",JLabel.CENTER);
+        banner = new JLabel("Choose a Color Scheme in the drop down menu. You can preview the scheme or save your choice.",JLabel.CENTER);
         banner.setForeground(Color.black);
         banner.setBackground(Color.white);
         banner.setOpaque(true);
@@ -249,11 +249,12 @@ public class ColorPickDefault {
 			WriteToPropertiesFile();
 			SaveNewDefaultViaSerializable();
 			frame.dispose();
+			System.exit(0);
 		}
 		
 	}
 	
-	private void CreateDefaultChoices() { //UNTESTED// NEED TO HARDCODE VALUES
+	private void CreateDefaultChoices() { // CAN HARDCODE ADDITIONAL VALUES
 		ArrayList<Color> Rainbow = new ArrayList<Color>();
 		ArrayList<Color> SpringTime = new ArrayList<Color>();
 		ArrayList<Color> Winter = new ArrayList<Color>();
@@ -331,6 +332,7 @@ public class ColorPickDefault {
 			//if nothing is there then does nothing.
 		
 			//also checks if there are duplicates, cant have same names, but can have same schemes.
+		
 		try {
 			FileInputStream fileStream = new FileInputStream("build/Saved_Default.ser");
 			ObjectInputStream inputStream = new ObjectInputStream(fileStream);
@@ -338,7 +340,7 @@ public class ColorPickDefault {
 			HashMap<String,ArrayList<Color>> TmpDefaults = (HashMap<String,ArrayList<Color>>) UserDefaults; //HASH>>>>????
 			UserChoicesToSave.putAll(TmpDefaults);
 			if (UserChoicesToSave != null) {
-				for (Map.Entry<String, ArrayList<Color>> entry : UserChoicesToSave.entrySet()) //USE CustomColorList...????
+				for (Map.Entry<String, ArrayList<Color>> entry : UserChoicesToSave.entrySet())
 				{
 					CustomColorList.put(entry.getKey(),entry.getValue());
 				}
@@ -346,7 +348,8 @@ public class ColorPickDefault {
 			inputStream.close();
 		}
 		catch (Exception ex) {
-			ex.printStackTrace();
+			//ex.printStackTrace();
+			System.out.println("Saved_Default.ser does not exist.  This means there are no previous user defined color schemes.");
 		}
 	}
 	
