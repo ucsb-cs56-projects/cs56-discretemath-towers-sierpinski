@@ -16,14 +16,14 @@ public class SVDefinitions extends SVCustom{
      */
     private Map<String, SVGraphics> content = new LinkedHashMap<String, SVGraphics>();
     
-    /** no-arg constructor calls super and sets tag to g
+    /** no-arg constructor calls super and sets tag to defs
      */
     public SVDefinitions() {
         super();
         setTag("defs");
     }
     
-    /** no-arg constructor calls super, sets tag to g, and sets location
+    /** no-arg constructor calls super, sets tag to defs, and sets location
      */
     public SVDefinitions(Point location) {
         super();

@@ -57,9 +57,8 @@ public class SVCanvas {
        with root svg, specifies width and height of canvas, and scales 
        content to canvas dimensions
      */
-    public SVCanvas(int viewPortX, int viewPortY, int width, int height) {
+    public SVCanvas(int width, int height) {
         try {
- 
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
                 docFactory.setNamespaceAware(true);
 		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -67,10 +66,8 @@ public class SVCanvas {
 		this.root = this.document.createElement("svg");
                 this.root.setAttribute("xmlns", "http://www.w3.org/2000/svg");
                 this.root.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-                this.root.setAttribute("preserveAspectRatio","none");
                 this.root.setAttribute("width", width + "px");
                 this.root.setAttribute("height", height + "px");
-                this.root.setAttribute("viewBox", "0 0 " + viewPortX + " " + viewPortY);
 		this.document.appendChild(this.root);
  
 	  } catch (ParserConfigurationException pce) {

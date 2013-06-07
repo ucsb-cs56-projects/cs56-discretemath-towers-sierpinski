@@ -43,4 +43,34 @@ public class SVUse extends SVGraphics{
     public void setXLink(String link) {
         this.setAttribute("xlink:href", "#" + link);
     }
+    
+    /** Returns rectangle height
+     @return height of rectangle
+     */
+    public int getHeight() {
+        String s = this.getAttribute("height");
+        if(s == null) return 0; else return Integer.parseInt(s);
+    }
+    
+    /** Sets rectangle height
+     @param height
+     */
+    public void setHeight(int height) {
+        this.setAttribute("height", height + "");
+    }
+    
+    /** Returns rectangle height
+     @return height of rectangle
+     */
+    public int getWidth() {
+        String s = this.getAttribute("width");
+        if(s == null) return 0; else return Integer.parseInt(s);
+    }
+    
+    /** Sets rectangle height
+     @param height
+     */
+    public void setWidth(int width) {
+        this.setAttribute("width", width + "");
+    }
 }

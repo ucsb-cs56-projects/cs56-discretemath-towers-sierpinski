@@ -20,14 +20,13 @@ public class SierpinskiTriangleBuilder {
     private int disks;
     private int width = 960;
     private int height = 832;
-    private SVDefinitions defintions = new SVDefinitions();
+    private SVDefinitions definitions = new SVDefinitions();
     
     /** one arg constructor defines the # of disks
      */
     public SierpinskiTriangleBuilder(int disks) {
         this.disks = disks;
         loadColors();
-        build();
     }
     
     /** two arg constructor defines the # of disks
@@ -35,7 +34,6 @@ public class SierpinskiTriangleBuilder {
     public SierpinskiTriangleBuilder(int disks, ArrayList<Color> colors) {
         this.disks = disks;
         loadColors();
-        build();
         setColors(colors);
     }
     
@@ -83,8 +81,12 @@ public class SierpinskiTriangleBuilder {
     
     /** Returns the actual SVGraphics item that is the Sierpinski triangle
      */
-    public SVCustom build(){
-        if(this.disks < 1) return new SVCustom();
+    public void buildDefinition(){
+        this.createDiskDefinitions();
+        this.createSideDefinitions();
+        this.createTowerDefinition();
+        
+        if(this.disks < 1) return;
         SVCustom s = new SVCustom(new Point(40, (int)Math.pow(2, this.disks)*104 - 60));
         int left[] = new int[]{0,1};
         int right[] = new int[]{1,2};
@@ -92,7 +94,12 @@ public class SierpinskiTriangleBuilder {
         SierpinskiTriangle t = new SierpinskiTriangle(0,this.disks,this.disks-1, left,  right, bottom, buildInitial(this.disks));
         s.setAttribute("font-family", "Arial");
         s.addContent(t, "Triangle");
-        return s;
+        SVSymbol symbol = new SVSymbol("SierpinskiTriangle");
+        symbol.setAttribute("viewBox", "0 0 " + ((int)Math.pow(2, this.disks)*120 - 40) +
+                            " " + ((int)Math.pow(2, this.disks)*104 - 20));
+        symbol.addContent(s,"content");
+        
+        this.definitions.addContent(symbol, "SierpinskiTriangle");
     }
     
     /** Builds the arraylist of arraylist integers that represent the current state of the game.
@@ -114,7 +121,7 @@ public class SierpinskiTriangleBuilder {
             s.setBorderRadius(3);
             s.setColor(SierpinskiTriangle.colors.get(i));
             s.setId("side" + i);
-            this.defintions.addContent(s, "side"+i);
+            this.definitions.addContent(s, "side"+i);
         }
     }
     
@@ -141,7 +148,7 @@ public class SierpinskiTriangleBuilder {
             d.addContent(e, "e"+i);
             d.addContent(esmall, "esmall"+i);
             d.addContent(t,"t"+i);
-            this.defintions.addContent(d, "disk"+i);
+            this.definitions.addContent(d, "disk"+i);
         }
     }
     
@@ -176,16 +183,34 @@ public class SierpinskiTriangleBuilder {
         t.addContent(p2,"p2");
         t.addContent(p3,"p3");
         t.addContent(base,"base");
-        this.defintions.addContent(t, "tower");
+        this.definitions.addContent(t, "tower");
+    }
+    
+    /* Returns definitions
+        @return definitons variable
+     */
+    public SVDefinitions getDefinitions() {
+        return this.definitions;
+    }
+    
+    /* Returns use graphics element
+     @return use graphics element
+     */
+    public SVUse getUse() {
+        SVUse u = new SVUse("SierpinskiTriangle");
+        u.setWidth(this.width);
+        u.setHeight(this.height);
+        return u;
     }
     
     public void save(String file) {
-        this.createDiskDefinitions();
-        this.createSideDefinitions();
-        this.createTowerDefinition();
-        SVCanvas c = new SVCanvas( (int)Math.pow(2, this.disks)*120 - 40, (int)Math.pow(2, this.disks)*104 - 20,this.width,this.height);
-        c.addXMLContent(this.defintions);
-        c.addXMLContent(this.build());
+        buildDefinition();
+        SVCanvas c = new SVCanvas(this.width, this.height);
+        
+        c.addXMLContent(getDefinitions());
+        c.addXMLContent(getUse());
+        
+        
         c.saveTo(file);
     }
 }
