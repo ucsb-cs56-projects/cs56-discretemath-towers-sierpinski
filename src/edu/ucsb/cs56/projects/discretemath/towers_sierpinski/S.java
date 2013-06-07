@@ -670,7 +670,7 @@ public class S extends JPanel{
 	});
 	large.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent e){
-			s.setPreferredSize(new Dimension((int)(Math.pow(2,numDisks)*175), (int)(Math.pow(2,numDisks)*175)));
+			s.setPreferredSize(new Dimension((int)(Math.pow(2,numDisks)*175*2.5), (int)(Math.pow(2,numDisks)*175)));
 			s.update(s.getGraphics());
 		}
 	});
