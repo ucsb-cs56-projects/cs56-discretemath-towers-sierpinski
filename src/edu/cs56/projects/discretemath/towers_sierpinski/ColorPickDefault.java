@@ -5,10 +5,8 @@ import java.util.Properties;
 import java.util.ArrayList;
 import java.util.*;
 import java.util.Collections;
-
 import javax.swing.JOptionPane;
 import javax.swing.JDialog;
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -16,37 +14,38 @@ import javax.swing.event.*;
 import javax.swing.colorchooser.*;
 
 /**
- Parent Frame class that makes instances of ColorPickRunner or displays default color schemes to choose from.
-*/
+ ColorPickDefault, a more complex GUI that I infused with interesting buttons that give the option to save values for use in the future.
+ Also, this class can be viewed as a "Template" for other GUI's that wish to save instances and allow choices to the user.  Orig from scratch.
+ @author Will Mateer
+ @version CS56, proj3, S13
+ */
 public class ColorPickDefault {
 
-	private ColorPickRunner ColorRun; //needed
-    protected JLabel banner; //Displays written "Objective"?
-	private JFrame frame; //main frame
-	private JPanel TextPanel; //panel to hold Scroll area with written color hexes
+	private ColorPickRunner ColorRun; //Instance of ColorRunner made in the Choose option.
+    private JLabel banner; //Subtitle Text
+	private JFrame frame; //Main frame
+	private JPanel TextPanel; //Panel to hold Scroll area with written color hexes
 	private JPanel MainPanel; // Panel to add buttons and banner to
 	private JTextArea text; //main display of current chosen colors in hex form? (not like preview panel made by button)
-	private Map<String,ArrayList<Color>> CustomColorList; //Maybe change to map.  The list of all the available "default" color schemes.
-	private Map<String,ArrayList<Color>> UserChoicesToSave; //Possibly unnecessary.  Acts as buffer to be saved. Different from the total map.
-	private ArrayList<Color> ChosenColorList; //Current choice of ColorList.  Would be sent to props file/maybe added to defaults/
-	private ArrayList<Color> TmpList; // maybe unnecessary, but acts as a tmp transfer list for getting from a runner instance.
+	private Map<String,ArrayList<Color>> CustomColorList; //The list of all the available "default" color schemes.
+	private Map<String,ArrayList<Color>> UserChoicesToSave; //Acts as buffer of Userdefined Schemes to be saved. Different from the total map.
+	private ArrayList<Color> ChosenColorList; //Current choice of ColorList scheme.
+	private ArrayList<Color> TmpList; //acts as a temp transfer list for getting from a runner instance.
 	private boolean open; //boolean to tell parent prog whether it is open or not.
-	private JComboBox ComboChoices; //ComboBox gui for default. Is added to if CustomColorList is added to. Reflects CustomColorList.
+	private JComboBox ComboChoices; //ComboBox gui for default. Reflects changes in CustomColorList.
     
 	/**
-	 no arg constructor that makes the GUI, and sets up private variables.
+	 No arg constructor that sets up everything required for the class instance to run. This includes other method calls and lots of variable defintions.
 	*/
     public ColorPickDefault() {
 		
 		frame = new JFrame("Default Color Choices For Sierpinski Triangles");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		CustomColorList = new HashMap<String,ArrayList<Color>>();
 		UserChoicesToSave = new HashMap<String,ArrayList<Color>>();
 		CreateDefaultChoices();
 		ChosenColorList = new ArrayList<Color>();
 		open = true;
-		//SaveNewDefaultViaSerializable();
 		//TITLE
         banner = new JLabel("Choose a Color Scheme in the drop down menu. You can preview the scheme or save your choice.",JLabel.CENTER);
         banner.setForeground(Color.black);
@@ -63,38 +62,34 @@ public class ColorPickDefault {
 		scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		TextPanel.add(scroller);
-		UpdateTextWithChosenColor(); //USE UPDATE METHOD, also updates everytime ChosenColorList changes.
+		UpdateTextWithChosenColor();
 		
-		//COMBOBOX, needs to be set to reflect changes in CustomColorList...
+		//COMBOBOX
 		ComboChoices = new JComboBox();
 		UpdateChoiceBox();
 		ComboChoices.addActionListener(new ChoiceComboListener());
-		//USE UPDATE METHOD
 		
-		//ADD BUTTON AT BOTTOM OF PICKER PANEL TO CONFIRM A COLOR CHOICE
+		//ADD BUTTON TO PICKER PANEL TO CONFIRM A COLOR CHOICE
 		JButton PreviewButton = new JButton("Preview Current Color Scheme");
 		PreviewButton.addActionListener(new PreviewListener());
 		
-		//ADD BUTTON AT BOTTOM OF PICKER PANEL TO EXIT AND RETURN VALUE TO PARENT PROG CALL
+		//ADD BUTTON TO PICKER PANEL TO EXIT AND RETURN VALUE TO PARENT PROG CALL
 		JButton ExitButton = new JButton("Close Window and Export Colors");
 		ExitButton.addActionListener(new ExitListener());
 		
-		//ADD BUTTON AT BOTTOM OF FRAME TO OPEN NEW CUSTOM PICKER
+		//ADD BUTTON TO FRAME TO OPEN NEW CUSTOM PICKER
 		JButton CustomButton = new JButton("Choose New Scheme");
 		CustomButton.addActionListener(new CustomListener());
 		
-		//ADD RESET TO DEFAULTS BUTTON???? removes user defined classes without having to ant clean. Possibly. Cant implement until serialzable is done.
+		//ADD RESET TO DEFAULTS BUTTON
 		JButton ResetButton = new JButton("Reset to default schemes");
 		ResetButton.addActionListener(new ResetListener());
 		
-		//ADD TO VARIOUS PANELS,THEN TO FRAME TO MAKE LAYOUT SIMPLER.
+		//ADD EVERYTHING TO LAYOUT
 		MainPanel = new JPanel(new BorderLayout());
 		
 		MainPanel.add(TextPanel, BorderLayout.CENTER);
         MainPanel.add(ComboChoices, BorderLayout.NORTH);
-		//MainPanel.add(CustomButton, BorderLayout.EAST);
-		//MainPanel.add(ExitButton, BorderLayout.WEST);
-		//MainPanel.add(PreviewButton, BorderLayout.SOUTH);
 
 		JPanel LeftPanel = new JPanel(new BorderLayout());
 		LeftPanel.add(ExitButton, BorderLayout.NORTH);
@@ -106,13 +101,14 @@ public class ColorPickDefault {
 		
 		frame.add(MainPanel,BorderLayout.CENTER);
 		frame.add(banner,BorderLayout.NORTH);
-		//frame.add(ResetButton,BorderLayout.SOUTH);
 		frame.add(LeftPanel,BorderLayout.WEST);
 		frame.add(RightPanel,BorderLayout.EAST);
 		frame.pack();
         frame.setVisible(true);
 	}
-
+	/**
+	 Listener for ComboBox. Calls UpdateTextWithChosenColor() method.
+	*/
 	class ChoiceComboListener implements ActionListener {
 		public void actionPerformed(ActionEvent event){
 			String ColorTmpCB = (String)ComboChoices.getSelectedItem();
@@ -123,10 +119,7 @@ public class ColorPickDefault {
 	
 	/**
 	 Creates a new instance of ColorPickRunner each time
-	 the button calls the ActionListener.  Also the main thread waits for the 
-	 new window to close before it can finish.
-	 ////USE THIS BUTTON TO RUN THE COLORRUNNERCLASS INSTANCE...
-	 
+	 the button calls the ActionListener. Also determines if the user wants to end or continue.
 	 */
 	class CustomListener implements ActionListener { //ALMOST DONE WITH METHOD
 		public void actionPerformed(ActionEvent event){
@@ -153,13 +146,10 @@ public class ColorPickDefault {
 					finally {
 						
 						TmpList = ColorRun.returnColorList();
-							
-						//PROMPT/OPTIONBOX...ALMOST DONE
-						
 						Object[] options = {"Save & Continue","Export & Exit"};
 						int n = JOptionPane.CLOSED_OPTION;
 						String Choice = null;
-						
+
 						while (n == JOptionPane.CLOSED_OPTION) {
 							n = JOptionPane.showOptionDialog(null, "Would you like to save your choice and continue browsing or would you like to confirm as your final choice",
 															  "Custom Color Chooser", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
@@ -172,19 +162,14 @@ public class ColorPickDefault {
 									Choice = null;
 								}
 							}
-							//ADD CHOICE AND CHOSEN COLOR LIST TO MAP
 							ChosenColorList = TmpList;
 							CustomColorList.put(Choice, ChosenColorList);
 							UserChoicesToSave.put(Choice, ChosenColorList);
 							UpdateTextWithChosenColor();
-							//ADDS OPTION TO COMBOBOX
 							ComboChoices.addItem(Choice);
 							ComboChoices.setSelectedItem(Choice);
 						}
 						else if(n == JOptionPane.NO_OPTION) {
-							//(Close down and save color choice, do not add, Save Via Properties, 
-							//Also make attempt to call SaveViaSerialzable to save other possible schemes)
-								
 							ChosenColorList = TmpList;
 							frame.setVisible(false);
 							WriteToPropertiesFile();
@@ -201,9 +186,11 @@ public class ColorPickDefault {
 		}
 	}
 	
+	/**
+	 Listener for preview button.  Also makes a PreviewPanel instance as defined later on.
+	*/
 	class PreviewListener implements ActionListener {
 		public void actionPerformed(ActionEvent event){
-			
 			final Runnable Linker = new Runnable() {
 				public void run() {
 					JFrame PreviewFrame = new JFrame();
@@ -232,6 +219,9 @@ public class ColorPickDefault {
 
 	}
 	
+	/**
+	 Draws the preview panel, and is called in the preview listener
+	*/
 	class PreviewPanel extends JPanel{
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
@@ -244,7 +234,7 @@ public class ColorPickDefault {
 	
 	/** 
 	 This class is called when exit button is pressed.  This exports 
-	 chosen colors to a Properties file.//SHOULD STAY THE SAME MOSTLY  MAYBE CHANGE TO SERIALZABLE... for the saving of arraylist objs.
+	 chosen colors to a Properties file and saves the UserDef values via serializible. And ends program.
 	 */
 	class ExitListener implements ActionListener {
 		public void actionPerformed(ActionEvent event){
@@ -257,13 +247,15 @@ public class ColorPickDefault {
 		}
 	}
 	
+	/**
+	 Listener for Reset Button, removes items from combo box and resets the UserDef values.
+	*/
 	class ResetListener implements ActionListener {
 		public void actionPerformed(ActionEvent event){
 			File serFile = new File("build/Saved_Default.ser");
 			if (serFile.exists()){
 				serFile.delete();
 			}
-			//RESET COMBO BOX,USER DEFAULT TO SAVE
 			for (Map.Entry<String, ArrayList<Color>> entry : UserChoicesToSave.entrySet())
 			{
 				ComboChoices.removeItem(entry.getKey());
@@ -275,6 +267,9 @@ public class ColorPickDefault {
 		}
 	}
 	
+	/**
+	 method that provides hardcoded defaults to load into the program. Also checks if there were saved user defined values.
+	*/
 	private void CreateDefaultChoices() { // CAN HARDCODE ADDITIONAL VALUES
 		ArrayList<Color> Rainbow = new ArrayList<Color>();
 		ArrayList<Color> SpringTime = new ArrayList<Color>();
@@ -295,21 +290,24 @@ public class ColorPickDefault {
 		CustomColorList.put("GrayScale",GrayScale);
 		CustomColorList.put("Purples",Purples);
 		
-		//ADD USER DEFINED DEFAULTS
-		
 		CheckSavedUserDefinedSchemes();
 	}
-	
-	private void UpdateChoiceBox() { //Directly resets and updates ComboChoices Dialog box.
+	/**
+	 Updates the combobox with CustomColorList values
+	*/
+	private void UpdateChoiceBox() {
 		CreateDefaultChoices();
 		
-		for (Map.Entry<String, ArrayList<Color>> entry : CustomColorList.entrySet()) //USE CustomColorList...????
+		for (Map.Entry<String, ArrayList<Color>> entry : CustomColorList.entrySet())
 		{
 			ComboChoices.addItem(entry.getKey());
 		}
 	}
 	
-	private void UpdateTextWithChosenColor() { //goes through ChosenColorList and writes it to the text area, resets each time.
+	/**
+	 method that goes through ChosenColorList and writes it to the text area, resets each time.
+	*/
+	private void UpdateTextWithChosenColor() { 
 		text.setText("");
 		for (int i=0; i < ChosenColorList.size();i++)
 		{
@@ -320,7 +318,7 @@ public class ColorPickDefault {
 	
 	/**
 	 Method that saves the chosen colors in the ChosenColorList 
-	 to a properties file in the build directory. //STAY THE SAME MOSTLY
+	 to a properties file in the build directory.
 	*/
 	public void WriteToPropertiesFile(){
 		
@@ -344,6 +342,9 @@ public class ColorPickDefault {
         }
 	}
 	
+	/**
+	 Checks for a serialized file from previous ColorDef instances.  Saves the findings to CustomColorList and UserChoicesToSave.
+	*/
 	private void CheckSavedUserDefinedSchemes() {
 			//checks the saved Serialzed obj file.
 		
@@ -372,9 +373,10 @@ public class ColorPickDefault {
 		}
 	}
 	
-	
-	private void SaveNewDefaultViaSerializable() { //Adds to the default colors provided and when called in option box of ColorRunner.close()
-		//if (UserChoicesToSave != null) {
+	/**
+	 Saves the UserDef values of ColorDef instance to a .ser file.  This is revived in later instances to extract saved User Color scheme choices.
+	*/
+	private void SaveNewDefaultViaSerializable() { 
 			try{
 				FileOutputStream fileStream = new FileOutputStream("build/Saved_Default.ser");
 				ObjectOutputStream outStream = new ObjectOutputStream(fileStream);
@@ -384,7 +386,6 @@ public class ColorPickDefault {
 			catch (Exception ex) {
 				ex.printStackTrace();
 			}
-		//}
 	}
 	
 	/**
@@ -398,8 +399,8 @@ public class ColorPickDefault {
 	}
 	
 	/**
-	 Method for nonmembers to access the ColorList directly.
-	 @return ArrayList<Color> ColorList
+	 Method for nonmembers to access the ChosenColorList directly.
+	 @return ChosenColorList Arraylist that is the chosen Color scheme
 	*/
 	public ArrayList<Color> returnColorList() {
 		return ChosenColorList;
