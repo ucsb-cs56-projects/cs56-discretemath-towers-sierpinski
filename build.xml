@@ -26,6 +26,10 @@
         </java>
     </target>
     
+    <target name="setColors" depends="compile" description="sets colors.properties file">
+        <java classname="${packagePrefix}.SierpinskiTriangle.SetColors" classpath="build" />
+    </target>
+    
     <target name="getArgs" unless="args" description="prompts for command line args">
         <input addProperty="args" message="Enter the desired arguments with the form: &lt;number_of_disks> &lt;width> &lt;height> &lt;save_file_path> "/>
     </target>

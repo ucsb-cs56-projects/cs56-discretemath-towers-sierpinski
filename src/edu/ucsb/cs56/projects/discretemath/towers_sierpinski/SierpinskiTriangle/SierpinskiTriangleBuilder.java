@@ -5,6 +5,10 @@ import java.awt.Point;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 /**
  * SierpinskiTriangleBuilder class used with SierpinskiTriangle class to build 
  * Towers of Hanoi representation
@@ -22,6 +26,7 @@ public class SierpinskiTriangleBuilder {
      */
     public SierpinskiTriangleBuilder(int disks) {
         this.disks = disks;
+        loadColors();
         build();
     }
     
@@ -29,6 +34,7 @@ public class SierpinskiTriangleBuilder {
      */
     public SierpinskiTriangleBuilder(int disks, ArrayList<Color> colors) {
         this.disks = disks;
+        loadColors();
         build();
         setColors(colors);
     }
@@ -40,6 +46,31 @@ public class SierpinskiTriangleBuilder {
     public void setDimensions(int width, int height) {
         this.width = width;
         this.height = height;
+    }
+    
+    /** loads colors from colors.properties file
+     */
+    public void loadColors() {
+        Properties prop = new Properties();
+        ArrayList<Color> colors = new ArrayList<Color>();
+        int i = 0;
+    	try {
+    		prop.load(new FileInputStream("colors.properties"));
+            while(prop.getProperty(""+i) != null) {
+                try {
+                    Color c = Color.decode("0x" + prop.getProperty(""+i));
+                    colors.add(c);
+                } catch (NumberFormatException nfe) {
+                    nfe.printStackTrace();
+                } finally {
+                    i++;
+                }
+            }
+            
+    	} catch (IOException ex) {
+    		ex.printStackTrace();
+        }
+        setColors(colors);
     }
     
     /** sets color array list for SierpinskiTriangle class

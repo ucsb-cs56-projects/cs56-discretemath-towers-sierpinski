@@ -25,26 +25,21 @@ public class SierpinskiTriangle extends SVCustom{
     private int iteration;
     public static ArrayList<Color> colors = new ArrayList<Color>();
     
-    /** Takes four arguments: # of disks, width, height, and file path. Creates svg image of triangle 
+    /** Takes 4 arguments: # of disks, width, height, and file path. Creates svg image of triangle 
      *  and saves the content to given file path. Option additional parameters are 
      *  the hexadecimal value of the colors 
      * 
      *  Sample: 
-     *              3 960 832 /Desktop/test.svg B8860B 4169E1 228B22
+     *              3 960 832 /Desktop/test.svg
      */
     public static void main(String[] args) {
         try {
-            int argLength = args.length;
-            if(argLength < 4) throw new Exception("Too view parameters");
+            if(args.length != 4) throw new Exception();
             int length = Integer.parseInt(args[0]);
             SierpinskiTriangleBuilder builder = new SierpinskiTriangleBuilder(length);
             builder.setDimensions(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
-            ArrayList<Color> colors = new ArrayList<Color>();
-            for(int i = 4; argLength > i; i++) colors.add(Color.decode("0x" + args[i]));
-            builder.setColors(colors);
             builder.save(args[3]);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             System.out.println("usage: <number_of_disks> <width> <height> <save_file_path>");
         }
         
