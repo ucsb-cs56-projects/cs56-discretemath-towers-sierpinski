@@ -491,12 +491,12 @@ public class S extends JPanel{
 
     public void initS(int n){
 	this.n=n;
-	side=getPreferredSize().getHeight()*4/5;
+	side=Math.min(175*(Math.pow(2,n+1)-1),getPreferredSize().getHeight()*4/5);
 	sL=side/(Math.pow(2,n+1)-1);
 	tx=getPreferredSize().getWidth()/2;
 	ty=100;
 
-	tS=10;
+	tS=3;
 	hS=30;
 	mF=new Font("Arial", Font.PLAIN, 12);
 	eF=mF;
