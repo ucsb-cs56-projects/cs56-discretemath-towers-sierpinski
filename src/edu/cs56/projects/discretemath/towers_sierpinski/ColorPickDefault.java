@@ -40,23 +40,19 @@ public class ColorPickDefault {
 		
 		frame = new JFrame("Default Color Choices For Sierpinski Triangles");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		CustomColorList = new HashMap<String,ArrayList<Color>>();
-		
 		UserChoicesToSave = new HashMap<String,ArrayList<Color>>();
-		//SaveNewDefaultViaSerializable();
-
 		CreateDefaultChoices();
-		
 		ChosenColorList = new ArrayList<Color>();
-
 		open = true;
-		
+		//SaveNewDefaultViaSerializable();
 		//TITLE
         banner = new JLabel("Choose a Color Scheme in the drop down menu. You can preview the scheme or save your choice.",JLabel.CENTER);
         banner.setForeground(Color.black);
         banner.setBackground(Color.white);
         banner.setOpaque(true);
-        banner.setFont(new Font("SansSerif", Font.BOLD, 20));
+        banner.setFont(new Font("ComicSans", Font.BOLD, 20));
 		
 		//DISPLAYS CURRENT CHOICES COLORS IN ORDER AND BY HEX/COLOR_TO_TEXT???
 		TextPanel = new JPanel(new BorderLayout());
@@ -71,7 +67,6 @@ public class ColorPickDefault {
 		
 		//COMBOBOX, needs to be set to reflect changes in CustomColorList...
 		ComboChoices = new JComboBox();
-		//ComboChoices.setSelectedIndex(0);
 		UpdateChoiceBox();
 		ComboChoices.addActionListener(new ChoiceComboListener());
 		//USE UPDATE METHOD
@@ -89,29 +84,40 @@ public class ColorPickDefault {
 		CustomButton.addActionListener(new CustomListener());
 		
 		//ADD RESET TO DEFAULTS BUTTON???? removes user defined classes without having to ant clean. Possibly. Cant implement until serialzable is done.
+		JButton ResetButton = new JButton("Reset to default schemes");
+		ResetButton.addActionListener(new ResetListener());
 		
 		//ADD TO VARIOUS PANELS,THEN TO FRAME TO MAKE LAYOUT SIMPLER.
 		MainPanel = new JPanel(new BorderLayout());
 		
 		MainPanel.add(TextPanel, BorderLayout.CENTER);
         MainPanel.add(ComboChoices, BorderLayout.NORTH);
-		MainPanel.add(CustomButton, BorderLayout.EAST);
-		MainPanel.add(ExitButton, BorderLayout.WEST);
-		MainPanel.add(PreviewButton, BorderLayout.SOUTH);
+		//MainPanel.add(CustomButton, BorderLayout.EAST);
+		//MainPanel.add(ExitButton, BorderLayout.WEST);
+		//MainPanel.add(PreviewButton, BorderLayout.SOUTH);
+
+		JPanel LeftPanel = new JPanel(new BorderLayout());
+		LeftPanel.add(ExitButton, BorderLayout.NORTH);
+		LeftPanel.add(ResetButton, BorderLayout.SOUTH);
 		
-		frame.add(MainPanel);
+		JPanel RightPanel = new JPanel(new BorderLayout());
+		RightPanel.add(CustomButton, BorderLayout.NORTH);
+		RightPanel.add(PreviewButton, BorderLayout.SOUTH);
+		
+		frame.add(MainPanel,BorderLayout.CENTER);
 		frame.add(banner,BorderLayout.NORTH);
+		//frame.add(ResetButton,BorderLayout.SOUTH);
+		frame.add(LeftPanel,BorderLayout.WEST);
+		frame.add(RightPanel,BorderLayout.EAST);
 		frame.pack();
         frame.setVisible(true);
 	}
-	
-	
-	
+
 	class ChoiceComboListener implements ActionListener {
 		public void actionPerformed(ActionEvent event){
 			String ColorTmpCB = (String)ComboChoices.getSelectedItem();
 			ChosenColorList = CustomColorList.get(ColorTmpCB);
-			UpdateTextWithChosenColor(); //SEPARTE METHOD TO UPDATE COLOR LABEL WITH COLOR IN CURRENT LIST CHOSEN
+			UpdateTextWithChosenColor();
 		}
 	}
 	
@@ -124,8 +130,6 @@ public class ColorPickDefault {
 	 */
 	class CustomListener implements ActionListener { //ALMOST DONE WITH METHOD
 		public void actionPerformed(ActionEvent event){
-			//Arraylist <Color> TmpList; //.add(new Color(0,0,0));
-			
 			final Runnable Linker = new Runnable() {
 				public void run() {
 					ColorRun = new ColorPickRunner();
@@ -187,6 +191,7 @@ public class ColorPickDefault {
 							SaveNewDefaultViaSerializable();
 							open = false;
 							frame.dispose();
+							System.exit(1);
 						}
 						
 					}
@@ -244,14 +249,30 @@ public class ColorPickDefault {
 	class ExitListener implements ActionListener {
 		public void actionPerformed(ActionEvent event){
 			open = false;
-			//return arraylist value to target...?, should be obj that instantiates this obj to make call to private arraylist.
 			frame.setVisible(false);
 			WriteToPropertiesFile();
 			SaveNewDefaultViaSerializable();
 			frame.dispose();
 			System.exit(0);
 		}
-		
+	}
+	
+	class ResetListener implements ActionListener {
+		public void actionPerformed(ActionEvent event){
+			File serFile = new File("build/Saved_Default.ser");
+			if (serFile.exists()){
+				serFile.delete();
+			}
+			//RESET COMBO BOX,USER DEFAULT TO SAVE
+			for (Map.Entry<String, ArrayList<Color>> entry : UserChoicesToSave.entrySet())
+			{
+				ComboChoices.removeItem(entry.getKey());
+			}
+			UserChoicesToSave = new HashMap<String,ArrayList<Color>>(); 
+			SaveNewDefaultViaSerializable();
+			ComboChoices.setSelectedIndex(0);
+			UpdateTextWithChosenColor();
+		}
 	}
 	
 	private void CreateDefaultChoices() { // CAN HARDCODE ADDITIONAL VALUES
@@ -280,7 +301,6 @@ public class ColorPickDefault {
 	}
 	
 	private void UpdateChoiceBox() { //Directly resets and updates ComboChoices Dialog box.
-		//ComboChoices.removeAllItems(); CAUSES PROBLEMS
 		CreateDefaultChoices();
 		
 		for (Map.Entry<String, ArrayList<Color>> entry : CustomColorList.entrySet()) //USE CustomColorList...????
@@ -348,14 +368,13 @@ public class ColorPickDefault {
 			inputStream.close();
 		}
 		catch (Exception ex) {
-			//ex.printStackTrace();
 			System.out.println("Saved_Default.ser does not exist.  This means there are no previous user defined color schemes.");
 		}
 	}
 	
 	
 	private void SaveNewDefaultViaSerializable() { //Adds to the default colors provided and when called in option box of ColorRunner.close()
-		if (UserChoicesToSave != null) {
+		//if (UserChoicesToSave != null) {
 			try{
 				FileOutputStream fileStream = new FileOutputStream("build/Saved_Default.ser");
 				ObjectOutputStream outStream = new ObjectOutputStream(fileStream);
@@ -365,7 +384,7 @@ public class ColorPickDefault {
 			catch (Exception ex) {
 				ex.printStackTrace();
 			}
-		}
+		//}
 	}
 	
 	/**
