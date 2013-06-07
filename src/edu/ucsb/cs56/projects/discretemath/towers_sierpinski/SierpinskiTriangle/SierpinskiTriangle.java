@@ -45,7 +45,7 @@ public class SierpinskiTriangle extends SVCustom{
             builder.save(args[3]);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            System.out.println("Requires at least four arguments: number_of_disks image_width image_height file_path");
+            System.out.println("usage: <number_of_disks> <width> <height> <save_file_path>");
         }
         
     }
