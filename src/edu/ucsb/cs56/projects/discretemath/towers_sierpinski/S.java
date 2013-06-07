@@ -2,7 +2,7 @@ package edu.cs56.projects.discretemath.towers_sierpinski;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
-
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.BasicStroke;
 import java.awt.Font;
@@ -627,38 +627,70 @@ public class S extends JPanel{
     public static void main(String[] args){
 	JFrame f = new JFrame("Sierpinski's Triangle with Towers of Hanoi");
 	if (args.length != 1){
-		System.err.println("Usage: java S numDisks");
+		System.err.println("Usage: ant -D#=numDisks run");
 		System.exit(1);
 	}
-	int numDisks=Integer.parseInt(args[0]);
+	int numDisks=0;
+	try{
+		numDisks = Integer.parseInt(args[0]);
+	}
+	catch (NumberFormatException nfe){
+		System.err.println("Usage: ant -D#=numDisks run");
+		System.exit(1);
+	}
 	final S s = new S(numDisks-1);
+	final JPanel top = new JPanel();
 	final JButton png = new JButton("save png");
 	final JButton jpg = new JButton("save jpg");
+	final JButton small = new JButton("small");
+	final JButton large = new JButton("large");
 	png.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent e){
-			s.remove(jpg);
-			s.remove(png);
+			top.remove(jpg);
+			top.remove(png);
+			top.remove(small);
+			top.remove(large);
 			SaveImage.savePNG(s);
-			s.add(png);
-			s.add(jpg);
+			top.add(png);
+			top.add(jpg);
+			top.add(small);
+			top.add(large);
 		}
 	});
 	jpg.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent e){
-			s.remove(jpg);
-			s.remove(png);
+			top.remove(jpg);
+			top.remove(png);
+			top.remove(small);
+			top.remove(large);
 			SaveImage.saveJPG(s);
-			s.add(png);
-			s.add(jpg);
+			top.add(png);
+			top.add(jpg);
+			top.add(small);
+			top.add(large);
 		}
 	});
-	s.add(png);
-	s.add(jpg);
-	s.setPreferredSize(new Dimension(2000,2000));
-	JScrollPane jsp = new JScrollPane(s, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+	small.addActionListener(new ActionListener(){
+		public void actionPerformed(ActionEvent e){
+			
+		}
+	});
+	large.addActionListener(new ActionListener(){
+		public void actionPerformed(ActionEvent e){
 
-	f.add(jsp);
-	System.out.println(f.getComponentCount());
+		}
+	});
+	top.add(png);
+	top.add(jpg);
+	top.add(small);
+	top.add(large);
+	s.setPreferredSize(new Dimension(2000,2000));
+	JScrollPane jsp = new JScrollPane(s, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+	JPanel whole = new JPanel();
+	whole.setLayout(new BorderLayout());
+	whole.add(top,BorderLayout.NORTH);
+	whole.add(jsp,BorderLayout.CENTER);
+	f.add(whole);
 	f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	f.setSize(1200,800);
 	f.setVisible(true);
