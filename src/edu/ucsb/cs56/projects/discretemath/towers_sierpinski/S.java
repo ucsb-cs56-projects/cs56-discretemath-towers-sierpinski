@@ -493,7 +493,7 @@ public class S extends JPanel{
 	this.n=n;
 	side=Math.min(175*(Math.pow(2,n+1)-1),getPreferredSize().getHeight()*4/5);
 	sL=side/(Math.pow(2,n+1)-1);
-	tx=getPreferredSize().getWidth()/2;
+	tx=getPreferredSize().getWidth()*2/3;
 	ty=100;
 
 	tS=3;
