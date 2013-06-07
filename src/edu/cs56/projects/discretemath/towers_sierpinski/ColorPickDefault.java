@@ -40,16 +40,15 @@ public class ColorPickDefault {
 		
 		frame = new JFrame("Default Color Choices For Sierpinski Triangles");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		CustomColorList = new HashMap<String,ArrayList<Color>>();//DUNNO IF CORRECT. FIXIXIIXI
+		CustomColorList = new HashMap<String,ArrayList<Color>>();
 		
 		UserChoicesToSave = new HashMap<String,ArrayList<Color>>();
 		SaveNewDefaultViaSerializable();
 
 		CreateDefaultChoices();
 		
-		ChosenColorList = new ArrayList<Color>(); // FIRST DEFAULT OPTION FOR CustomColorList//NEED TO IMPLEMENT BASED ON DEFAULT SCHEMES
-		
-		
+		ChosenColorList = new ArrayList<Color>();
+
 		open = true;
 		
 		//TITLE
@@ -89,21 +88,31 @@ public class ColorPickDefault {
 		JButton CustomButton = new JButton("Choose New Scheme");
 		CustomButton.addActionListener(new CustomListener());
 		
-		//ADD RESET TO DEFAULTS BUTTON???? removes user defined classes without having to ant clean. Possibly.
+		//ADD RESET TO DEFAULTS BUTTON???? removes user defined classes without having to ant clean. Possibly. Cant implement until serialzable is done.
 		
 		//ADD TO VARIOUS PANELS,THEN TO FRAME TO MAKE LAYOUT SIMPLER.
 		MainPanel = new JPanel(new BorderLayout());
 		
 		MainPanel.add(TextPanel, BorderLayout.CENTER);
-        MainPanel.add(banner, BorderLayout.NORTH);
+        MainPanel.add(ComboChoices, BorderLayout.NORTH);
 		MainPanel.add(CustomButton, BorderLayout.EAST);
 		MainPanel.add(ExitButton, BorderLayout.WEST);
 		MainPanel.add(PreviewButton, BorderLayout.SOUTH);
 		
 		frame.add(MainPanel);
-		frame.add(ComboChoices,BorderLayout.NORTH);
+		frame.add(banner,BorderLayout.NORTH);
 		frame.pack();
         frame.setVisible(true);
+	}
+	
+	
+	
+	class ChoiceComboListener implements ActionListener {
+		public void actionPerformed(ActionEvent event){
+			String ColorTmpCB = (String)ComboChoices.getSelectedItem();
+			ChosenColorList = CustomColorList.get(ColorTmpCB);
+			UpdateTextWithChosenColor(); //SEPARTE METHOD TO UPDATE COLOR LABEL WITH COLOR IN CURRENT LIST CHOSEN
+		}
 	}
 	
 	/**
@@ -113,17 +122,6 @@ public class ColorPickDefault {
 	 ////USE THIS BUTTON TO RUN THE COLORRUNNERCLASS INSTANCE...
 	 
 	 */
-	
-	class ChoiceComboListener implements ActionListener {
-		public void actionPerformed(ActionEvent event){
-			//JComboBox tmpCB = (JComboBox)ComboChoices.getSource();
-			String ColorTmpCB = (String)ComboChoices.getSelectedItem();
-			ChosenColorList = CustomColorList.get(ColorTmpCB);
-
-			UpdateTextWithChosenColor(); //SEPARTE METHOD TO UPDATE COLOR LABEL WITH COLOR IN CURRENT LIST CHOSEN
-		}
-	}
-	
 	class CustomListener implements ActionListener { //ALMOST DONE WITH METHOD
 		public void actionPerformed(ActionEvent event){
 			//Arraylist <Color> TmpList; //.add(new Color(0,0,0));
@@ -171,26 +169,23 @@ public class ColorPickDefault {
 								}
 							}
 							//ADD CHOICE AND CHOSEN COLOR LIST TO MAP
-							//Close Runner Frame but not default frame, add to CustomColorList,
-							//and UserChoicesToSave, Also UpdateTextWithChosenColor() is called);
-							
-							//? NEED TO FIX ALL THIS, MAINFRAME IN PLACE
 							ChosenColorList = TmpList;
 							CustomColorList.put(Choice, ChosenColorList);
 							UserChoicesToSave.put(Choice, ChosenColorList);
 							UpdateTextWithChosenColor();
-							UpdateChoiceBox();
-							SaveNewDefaultViaSerializable();
+							//ADDS OPTION TO COMBOBOX
+							ComboChoices.addItem(Choice);
+							ComboChoices.setSelectedItem(Choice);
 						}
-						
 						else if(n == JOptionPane.NO_OPTION) {
 							//(Close down and save color choice, do not add, Save Via Properties, 
 							//Also make attempt to call SaveViaSerialzable to save other possible schemes)
 								
-							ChosenColorList = TmpList;//NEED TO FIX ALL
+							ChosenColorList = TmpList;
 							frame.setVisible(false);
 							WriteToPropertiesFile();
 							SaveNewDefaultViaSerializable();
+							open = false;
 							frame.dispose();
 						}
 						
@@ -284,7 +279,7 @@ public class ColorPickDefault {
 	}
 	
 	private void UpdateChoiceBox() { //Directly resets and updates ComboChoices Dialog box.
-		ComboChoices.removeAllItems();
+		//ComboChoices.removeAllItems(); CAUSES PROBLEMS
 		CreateDefaultChoices();
 		
 		for (Map.Entry<String, ArrayList<Color>> entry : CustomColorList.entrySet()) //USE CustomColorList...????
@@ -318,7 +313,7 @@ public class ColorPickDefault {
 				prop.setProperty(ColorName, HexString); 
 			}
 			FileOutputStream Output = new FileOutputStream("build/DefaultColorProperties");
-			prop.store(Output, "Colors Saved by an instance of ColorPickRunner");
+			prop.store(Output, "Colors Saved by an instance of ColorPickDefault");
 			Output.flush();
 			Output.close();
 		} 
@@ -340,9 +335,14 @@ public class ColorPickDefault {
 			FileInputStream fileStream = new FileInputStream("build/Saved_Default.ser");
 			ObjectInputStream inputStream = new ObjectInputStream(fileStream);
 			Object UserDefaults = inputStream.readObject();
-			Map<String,ArrayList<Color>> TmpDefaults = (HashMap<String,ArrayList<Color>>) UserDefaults; //HASH>>>>????
+			HashMap<String,ArrayList<Color>> TmpDefaults = (HashMap<String,ArrayList<Color>>) UserDefaults; //HASH>>>>????
 			UserChoicesToSave.putAll(TmpDefaults);
-			//CustomColorList.putAll(UserChoicesToSave);
+			if (UserChoicesToSave != null) {
+				for (Map.Entry<String, ArrayList<Color>> entry : UserChoicesToSave.entrySet()) //USE CustomColorList...????
+				{
+					CustomColorList.put(entry.getKey(),entry.getValue());
+				}
+			}
 			inputStream.close();
 		}
 		catch (Exception ex) {
@@ -352,7 +352,7 @@ public class ColorPickDefault {
 	
 	
 	private void SaveNewDefaultViaSerializable() { //Adds to the default colors provided and when called in option box of ColorRunner.close()
-		//if (UserChoicesToSave != null) {
+		if (UserChoicesToSave != null) {
 			try{
 				FileOutputStream fileStream = new FileOutputStream("build/Saved_Default.ser");
 				ObjectOutputStream outStream = new ObjectOutputStream(fileStream);
@@ -362,8 +362,9 @@ public class ColorPickDefault {
 			catch (Exception ex) {
 				ex.printStackTrace();
 			}
-		//}
+		}
 	}
+	
 	/**
 	 Method that works just like how ColorPickRunner.isOpen() works with this class
 	 This method can be used by a parent class call to determine if this window 
