@@ -1,6 +1,6 @@
 <project default="compile">
     
-    <!-- build.xml for cs56-discretemath-towers-sierpinski2, S13, CS56
+    <!-- build.xml for cs56-discretemath-towers-sierpinski2,  S13, CS56
      author: Martin Wolfenbarger -->
     <property environment="env"/> <!-- load the environment variables -->
     <property name="packagePrefix" value="edu.ucsb.cs56.projects.discretemath.towers_sierpinski" />
