@@ -25,6 +25,8 @@ Goal 1:  Write a Java class with a method that
 * width  width and height in pixels
 
 Will draw on the screen in a Swing gui a representation of diagrams similar to those shown in the linnks above (which were hand drawn.)
+Note: Use build2.xml to run this file 
+
 
 ~estimate: 360 
 
