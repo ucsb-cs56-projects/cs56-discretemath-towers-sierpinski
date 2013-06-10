@@ -1,108 +1,174 @@
 <project default="compile">
+<<<<<<< HEAD
 
-  <!-- build.xml for Sierpinski's Triangle 
-       name: @@@ Gordon Cheung, Jacob Anderson @@@ -->
-  <property name="mainClass" value="S" />
-  <property environment="env"/> <!-- load the environment variables --> 
-  <property name="webRoot" value="${env.HOME}/public_html/cs56" />
-  <property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56" />
-  <property name="projectName" value="sierpinskitriangle" /> 
-  <property name="javadocDest" value="${webRoot}/${projectName}/javadoc" /> 
-  <property name="javadocURL" value="${webBaseURL}/${projectName}/javadoc" /> 
-  <path id="project.class.path">
-         <pathelement location="build"/>
-         <pathelement location="lib/junit-4.8.2.jar"/>
-   </path>   
+<!-- build.xml for cs56-discretemath-towers-sierpinski2, S13, CS56
+     author: Martin Wolfenbarger -->
+    <property environment="env"/> <!-- load the environment variables -->
+    <property name="packagePrefix" value="edu.ucsb.cs56.projects.discretemath.towers_sierpinski" />
+    <property name="webRoot" value="${env.HOME}/public_html/cs56" />
+    <property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56" />
+    <property name="projectName" value="cs56-discretemath-towers-sierpinski2" />
+    <property name="javadocDest" value="${webRoot}/${projectName}/javadoc" />
+    <property name="javadocURL" value="${webBaseURL}/${projectName}/javadoc" />
+    
+    <target name="compile" >
+        <mkdir dir="build" />
+        <javac srcdir="src" destdir="build" includeantruntime="false" debug="true" debuglevel="lines,vars,source" >
+            <classpath>
+                <pathelement location="build"/>
+                <pathelement location="lib/junit-4.8.2.jar"/>
+            </classpath>
+        </javac>
+    </target>
 
+    <target name="run" depends="compile, getArgs" description="run the SierpinskiTriangle program">
+        <java classname="${packagePrefix}.SierpinskiTriangle.SierpinskiTriangle" classpath="build">
+            <arg line="${args}"/>
+        </java>
+    </target>
+    
+    <target name="setColors" depends="compile" description="sets colors.properties file">
+        <java classname="${packagePrefix}.SierpinskiTriangle.SetColors" classpath="build" />
+    </target>
+    
+    <target name="getArgs" unless="args" description="prompts for command line args">
+        <input addProperty="args" message="Enter the desired arguments with the form: &lt;number_of_disks> &lt;width> &lt;height> &lt;save_file_path> "/>
+    </target>
+    
+    <target name="clean" description="delete unnecessary files and directories">
+        <delete dir="build" quiet="true" />
+        <delete dir="javadoc" quiet="true" />
+    </target>
+	
+    <target name="javadoc" depends="compile">
+        <delete dir="javadoc" quiet="true" />
+        <javadoc  destdir="javadoc" author="true" version="true" use="true" >
+            <fileset dir="src" includes="**/*.java"/>
+        </javadoc>
+        <!-- delete the old javadoc -->
+        <delete quiet="true" dir="${javadocDest}" />
+        <!-- copy everything you just made to the javadoc destination, and then make it readable -->
+        <copy todir="${javadocDest}" >
+            <fileset dir="javadoc"/>
+        </copy>
+        <!-- Note: this only does the chmod command on the
+         javadoc subdirectory and its contents.  You MIGHT have to
+         MANUALLY do the chmod on the parent directories.  However,
+         you should only need to do that once. -->
+        <chmod dir="${javadocDest}" perm="755"  type="dir" includes="**" />
+        <chmod dir="${javadocDest}" perm="755"  type="file" includes="**/*" />
+        <echo>Javadoc deployed to ${javadocURL}</echo>
+    </target>
 
-  <target name="compile" >  
-    <mkdir dir="build" />
-    <javac srcdir="src" destdir="build" debug="true" debuglevel="lines,source" includeantruntime="false">                                                                 <classpath>                                                                
-      <pathelement location="build"/>
-      <pathelement location="lib/junit-4.8.2.jar"/>               
-    </classpath>                                                                     </javac>       
- </target>
+	<target name="test" depends="compile">
+        
+        <junit haltonerror="no" haltonfailure="no">
+            <classpath>
+                <pathelement location="lib/junit-4.8.2.jar"/>
+                <pathelement location="build"/>
+            </classpath>
+            
+            <batchtest fork="yes">
+                <fileset dir="src">
+                    <!-- this will pick up every class with a name ending in Test -->
+                    <include name="*Test.java"/>
+                </fileset>
+            </batchtest>
+            
+            <formatter type="plain" usefile="false" />
+            
+        </junit>
+    </target>
 
- <target name="clean" description="delete unnecessary files and directories">
-    <delete dir="build" failonerror="false" verbose="true" />
-    <mkdir dir="build" />
-    <delete dir="javadoc" failonerror="false" verbose="true" />  <!-- the local copy -->
-    <mkdir dir="javadoc" />
-  </target>
-
-
-<target name="javadoc" depends="compile" description="publish javadoc"> 
-   <delete dir="javadoc" quiet="true" /> 
-   <javadoc  destdir="javadoc" author="true" version="true" use="true" >
-     <fileset dir="src" includes="**/*.java"/>
-     <classpath refid="project.class.path" />
-     <link href="${javadocLink}" /> <!-- for external links to std API classes -->
-   </javadoc>
-
-   <!-- delete the old javadoc --> 
-   <delete quiet="true" dir="${javadocDest}" /> 
- 
-   <!-- copy everything you just made to the javadoc destination,
-	and then make it readable -->   
-   <copy todir="${javadocDest}" > 
-     <fileset dir="javadoc"/> 
-   </copy> 
-
-   <!-- Note: this only does the chmod command on the javadoc
-	subdirectory and its contents.  You MIGHT have to MANUALLY do the
-	chmod on the parent directories.  However, you should only need to do
-	that once. 
-     -->
-   <chmod dir="${javadocDest}" perm="755"  type="dir" includes="**" /> 
-   <chmod dir="${javadocDest}" perm="755"  type="file" includes="**/*" /> 
-   <echo>Javadoc deployed to ${javadocURL}</echo>
- </target>        
-
-
-<target name="test" depends="compile">
-
-    <junit haltonerror="no" haltonfailure="no">
-       <classpath>
-         <pathelement location="lib/junit-4.8.2.jar"/>
-         <pathelement location="build"/>
-       </classpath>
-
-       <batchtest fork="yes">
-          <fileset dir="src">
-            <!-- this will pick up every class with a name ending in Test -->
-            <include name="*Test.java"/>
-          </fileset>
-       </batchtest>
-
-        <formatter type="plain" usefile="false" /> 
-       
-    </junit>
-  </target>
-
- <target name="help" depends="compile" description="tells user how to run the class ${mainClass}">
-    <echo>
-To run the program, type these commands:
-   ant -D#=arg run
-arg should be an integer greater than or equal to 1
-   </echo>
-  </target>
-
-<target name="run" depends="compile" description="runs the class ${mainClass} with arg # refer to ant help">
-    <java fork="true" classname="edu.cs56.projects.discretemath.towers_sierpinski.${mainClass}" classpath="build">
-    <arg line = "${#}"/>
-    </java>
-  </target>
-
-<target name="EX_GUI" depends="compile" description="run an example of ColorPickRunner main">
-    <java fork="true" classpathref="project.class.path" 
-	  classname="edu.cs56.projects.discretemath.towers_sierpinski.ColorPickRunner" />
-  </target>
+	<target name="EX_GUI" depends="compile" description="run an example of ColorPickRunner main">
+		<java fork="true" classpathref="project.class.path" 
+		classname="edu.ucsb.cs56.projects.discretemath.towers_sierpinski.ColorPickerGUI.ColorPickRunner" />
+	</target>
   <!-- added by Will Mateer, to demonstrate an instance of the colorpicker before it is added to the main program.-->
 
-<target name="EX_DEF" depends="compile" description="run an example of ColorPickDefault main">
-    <java fork="true" classpathref="project.class.path" 
-	  classname="edu.cs56.projects.discretemath.towers_sierpinski.ColorPickDefault" />
-  </target>
-  <!-- added by Will Mateer, to demonstrate an instance of the extended colorpicker GUI before it is added to the main program.-->
-
-  </project>
+	<target name="EX_DEF" depends="compile" description="run an example of ColorPickDefault main">
+		<java fork="true" classpathref="project.class.path" 
+		classname="edu.ucsb.cs56.projects.discretemath.towers_sierpinski.ColorPickerGUI.ColorPickDefault" />
+	</target>
+	<!-- added by Will Mateer, to demonstrate an instance of the extended colorpicker GUI before it is added to the main program.-->
+</project>
+=======
+    <!-- build.xml for cs56-discretemath-towers-sierpinski2, S13, CS56
+     author: Martin Wolfenbarger -->
+    <property environment="env"/> <!-- load the environment variables -->
+    <property name="packagePrefix" value="edu.ucsb.cs56.projects.discretemath.towers_sierpinski" />
+    <property name="webRoot" value="${env.HOME}/public_html/cs56" />
+    <property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56" />
+    <property name="projectName" value="cs56-discretemath-towers-sierpinski2" />
+    <property name="javadocDest" value="${webRoot}/${projectName}/javadoc" />
+    <property name="javadocURL" value="${webBaseURL}/${projectName}/javadoc" />
+    
+    <target name="compile" >
+        <mkdir dir="build" />
+        <javac srcdir="src" destdir="build" includeantruntime="false" debug="true" debuglevel="lines,vars,source" >
+            <classpath>
+                <pathelement location="build"/>
+                <pathelement location="lib/junit-4.8.2.jar"/>
+            </classpath>
+        </javac>
+    </target>
+    
+    <target name="run" depends="compile, getArgs" description="run the SierpinskiTriangle program">
+        <java classname="${packagePrefix}.SierpinskiTriangle.SierpinskiTriangle" classpath="build">
+            <arg line="${args}"/>
+        </java>
+    </target>
+    
+    <target name="setColors" depends="compile" description="sets colors.properties file">
+        <java classname="${packagePrefix}.SierpinskiTriangle.SetColors" classpath="build" />
+    </target>
+    
+    <target name="getArgs" unless="args" description="prompts for command line args">
+        <input addProperty="args" message="Enter the desired arguments with the form: &lt;number_of_disks> &lt;width> &lt;height> &lt;save_file_path> "/>
+    </target>
+    
+    <target name="clean" description="delete unnecessary files and directories">
+        <delete dir="build" quiet="true" />
+        <delete dir="javadoc" quiet="true" />
+    </target>
+    
+    <target name="javadoc" depends="compile">
+        <delete dir="javadoc" quiet="true" />
+        <javadoc  destdir="javadoc" author="true" version="true" use="true" >
+            <fileset dir="src" includes="**/*.java"/>
+        </javadoc>
+        <!-- delete the old javadoc -->
+        <delete quiet="true" dir="${javadocDest}" />
+        <!-- copy everything you just made to the javadoc destination, and then make it readable -->
+        <copy todir="${javadocDest}" >
+            <fileset dir="javadoc"/>
+        </copy>
+        <!-- Note: this only does the chmod command on the
+         javadoc subdirectory and its contents.  You MIGHT have to
+         MANUALLY do the chmod on the parent directories.  However,
+         you should only need to do that once. -->
+        <chmod dir="${javadocDest}" perm="755"  type="dir" includes="**" />
+        <chmod dir="${javadocDest}" perm="755"  type="file" includes="**/*" />
+        <echo>Javadoc deployed to ${javadocURL}</echo>
+    </target>
+    <target name="test" depends="compile">
+        
+        <junit haltonerror="no" haltonfailure="no">
+            <classpath>
+                <pathelement location="lib/junit-4.8.2.jar"/>
+                <pathelement location="build"/>
+            </classpath>
+            
+            <batchtest fork="yes">
+                <fileset dir="src">
+                    <!-- this will pick up every class with a name ending in Test -->
+                    <include name="*Test.java"/>
+                </fileset>
+            </batchtest>
+            
+            <formatter type="plain" usefile="false" />
+            
+        </junit>
+    </target>
+</project>
+>>>>>>> upstream/master

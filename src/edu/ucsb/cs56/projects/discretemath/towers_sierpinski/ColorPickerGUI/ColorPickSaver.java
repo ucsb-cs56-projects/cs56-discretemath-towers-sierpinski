@@ -1,4 +1,4 @@
-package edu.cs56.projects.discretemath.towers_sierpinski;
+package edu.ucsb.cs56.projects.discretemath.towers_sierpinski.ColorPickerGUI;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
