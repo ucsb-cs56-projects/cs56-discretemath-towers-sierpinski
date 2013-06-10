@@ -1,5 +1,5 @@
 <project default="compile">
-    <!-- build.xml for cs56-discretemath-towers-sierpinski2, S13, CS56
+	<!-- build.xml for cs56-discretemath-towers-sierpinski2, S13, CS56
      author: Martin Wolfenbarger -->
     <property environment="env"/> <!-- load the environment variables -->
     <property name="packagePrefix" value="edu.ucsb.cs56.projects.discretemath.towers_sierpinski" />
@@ -18,7 +18,7 @@
             </classpath>
         </javac>
     </target>
-    
+
     <target name="run" depends="compile, getArgs" description="run the SierpinskiTriangle program">
         <java classname="${packagePrefix}.SierpinskiTriangle.SierpinskiTriangle" classpath="build">
             <arg line="${args}"/>
@@ -37,7 +37,7 @@
         <delete dir="build" quiet="true" />
         <delete dir="javadoc" quiet="true" />
     </target>
-    
+	
     <target name="javadoc" depends="compile">
         <delete dir="javadoc" quiet="true" />
         <javadoc  destdir="javadoc" author="true" version="true" use="true" >
@@ -57,7 +57,8 @@
         <chmod dir="${javadocDest}" perm="755"  type="file" includes="**/*" />
         <echo>Javadoc deployed to ${javadocURL}</echo>
     </target>
-    <target name="test" depends="compile">
+
+	<target name="test" depends="compile">
         
         <junit haltonerror="no" haltonfailure="no">
             <classpath>
@@ -76,4 +77,16 @@
             
         </junit>
     </target>
+
+	<target name="EX_GUI" depends="compile" description="run an example of ColorPickRunner main">
+		<java fork="true" classpath="build" 
+		classname="${packagePrefix}.ColorPickerGUI.ColorPickRunner" />
+	</target>
+  <!-- added by Will Mateer, to demonstrate an instance of the colorpicker before it is added to the main program.-->
+
+	<target name="EX_DEF" depends="compile" description="run an example of ColorPickDefault main">
+		<java fork="true" classpath="build" 
+		classname="${packagePrefix}.ColorPickerGUI.ColorPickDefault" />
+	</target>
+	<!-- added by Will Mateer, to demonstrate an instance of the extended colorpicker GUI before it is added to the main program.-->
 </project>
