@@ -5,7 +5,8 @@ Java software to explore the relationship between the Towers of Hanoi and the Si
 
 There are now two projects in the repo:
 * in order to run the build2.xml file use the following command:
-* ant -D#=numdisks run -f build2.xml
+* ant -f build2.xml -D#=numdisks run
+* where numdisks in the number of disks you want to have
 
 # Explanation
 
