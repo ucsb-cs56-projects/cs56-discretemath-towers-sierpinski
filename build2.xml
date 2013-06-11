@@ -1,5 +1,4 @@
 <project default="compile">
-<<<<<<< HEAD:build2.xml
 
   <!-- build.xml for Sierpinski's Triangle 
        name: @@@ Gordon Cheung, Jacob Anderson @@@ -->
@@ -94,5 +93,3 @@ arg should be an integer greater than or equal to 1
 
   </project>
 =======
-   
->>>>>>> adfd4f36318b3ca8cab276a3d8a9a6fdab4896fb:build.xml
