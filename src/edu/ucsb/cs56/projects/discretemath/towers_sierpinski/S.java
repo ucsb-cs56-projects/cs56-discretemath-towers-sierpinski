@@ -1,8 +1,9 @@
 package edu.cs56.projects.discretemath.towers_sierpinski;
-
+import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
-
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -25,15 +26,7 @@ import java.awt.event.*;
 
 public class S extends JPanel{
 
-
-    private int width=1200;
-    private int height = 800;
-    
-
     int numberOfT=0;
-
-    public int getWidth(){ return this.width;}
-    public int getHeight(){ return this.height;}
     
     private boolean printMessage=false;
     
@@ -476,7 +469,7 @@ public class S extends JPanel{
     private ArrayList<Color>colors;
     private double tx, ty;
     private double side, sL;
-    //private double width,height;
+    private double width,height;
     private double tS, hS;
     private Font mF, eF;
 
@@ -487,31 +480,28 @@ public class S extends JPanel{
        
      */
 
-    public S(int n /*, double width, double height*/){
-	this.n=n;
-	/*
-	  this.width=width;
-	  this.height=height;
-	  setSize(width,height);
-	  double min = Math.min(width,height); //wrong got bored
-	*/
-	side=600;
-	sL=side/(Math.pow(2,n+1)-1);
-	colors = new ArrayList<Color>();
+    public S(int n) {
+	initS(n);
+	this.colors = new ArrayList<Color>();
 	for (int i=0;i<n+1;i++){
-	    colors.add(new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255)));
+    		colors.add(new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255)));
 	}
-	tx=600.0;
-	ty=100.0;
 
-	tS=5;
+    }
+
+    public void initS(int n){
+	this.n=n;
+	side=Math.min(175*(Math.pow(2,n+1)-1),getPreferredSize().getHeight()*4/5);
+	sL=side/(Math.pow(2,n+1)-1);
+	tx=getPreferredSize().getWidth()*2/3;
+	ty=100;
+
+	tS=3;
 	hS=30;
 	mF=new Font("Arial", Font.PLAIN, 12);
 	eF=mF;
-    }
 
-    
-
+	}
     /**
        draws a single triangle
        @param g graphics
@@ -613,10 +603,14 @@ public class S extends JPanel{
     */
 
     public void paintComponent(Graphics g){
+	super.paintComponent(g);
 	drawSierpinski(g, n, tx, ty, "");
     }
 
-
+	public void setPreferredSize(Dimension d){
+		super.setPreferredSize(d);
+		initS(this.n);
+	}
     /**
        main
        @param args the number of disks-1
@@ -624,35 +618,73 @@ public class S extends JPanel{
     public static void main(String[] args){
 	JFrame f = new JFrame("Sierpinski's Triangle with Towers of Hanoi");
 	if (args.length != 1){
-		System.err.println("Usage: java S numDisks");
+		System.err.println("Usage: ant -D#=numDisks run");
 		System.exit(1);
 	}
-	int numDisks=Integer.parseInt(args[0]);
+	 int n=0;
+	try{
+		n = Integer.parseInt(args[0]);
+	}
+	catch (NumberFormatException nfe){
+		System.err.println("Usage: ant -D#=numDisks run");
+		System.exit(1);
+	}
+	final int numDisks=n;
 	final S s = new S(numDisks-1);
+	final JPanel top = new JPanel();
 	final JButton png = new JButton("save png");
 	final JButton jpg = new JButton("save jpg");
+	final JButton small = new JButton("small");
+	final JButton large = new JButton("large");
 	png.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent e){
-			s.remove(jpg);
-			s.remove(png);
+			top.remove(jpg);
+			top.remove(png);
+			top.remove(small);
+			top.remove(large);
 			SaveImage.savePNG(s);
-			s.add(png);
-			s.add(jpg);
+			top.add(png);
+			top.add(jpg);
+			top.add(small);
+			top.add(large);
 		}
 	});
 	jpg.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent e){
-			s.remove(jpg);
-			s.remove(png);
+			top.remove(jpg);
+			top.remove(png);
+			top.remove(small);
+			top.remove(large);
 			SaveImage.saveJPG(s);
-			s.add(png);
-			s.add(jpg);
+			top.add(png);
+			top.add(jpg);
+			top.add(small);
+			top.add(large);
 		}
 	});
-	s.add(png);
-	s.add(jpg);
-	f.add(s);
-	System.out.println(f.getComponentCount());
+	small.addActionListener(new ActionListener(){
+		public void actionPerformed(ActionEvent e){
+			s.setPreferredSize(new Dimension(800,800));
+			s.update(s.getGraphics());	
+		}
+	});
+	large.addActionListener(new ActionListener(){
+		public void actionPerformed(ActionEvent e){
+			s.setPreferredSize(new Dimension((int)(Math.pow(2,numDisks)*175*2.5), (int)(Math.pow(2,numDisks)*175)));
+			s.update(s.getGraphics());
+		}
+	});
+	top.add(png);
+	top.add(jpg);
+	top.add(small);
+	top.add(large);
+	s.setPreferredSize(new Dimension(800,800));
+	JScrollPane jsp = new JScrollPane(s, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+	JPanel whole = new JPanel();
+	whole.setLayout(new BorderLayout());
+	whole.add(top,BorderLayout.NORTH);
+	whole.add(jsp,BorderLayout.CENTER);
+	f.add(whole);
 	f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	f.setSize(1200,800);
 	f.setVisible(true);
