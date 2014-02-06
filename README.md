@@ -43,7 +43,8 @@ When opening the output.html file in your browser you will see something like th
 Within this project there is also a color picker tool which you can run using
 ```
 ant EX_DEF
-```and
+```
+and
 ```
 ant EX_GUI
 ```
