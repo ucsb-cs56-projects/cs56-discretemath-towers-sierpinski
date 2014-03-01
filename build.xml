@@ -89,4 +89,11 @@
 		classname="${packagePrefix}.ColorPickerGUI.ColorPickDefault" />
 	</target>
 	<!-- added by Will Mateer, to demonstrate an instance of the extended colorpicker GUI before it is added to the main program.-->
+
+
+<!--  Added by George Shih, W14 -->
+        <target name="runGUI" depends="compile" description="run the GUI SierpinskiTriangle program">
+	        <java fork="true" classpath="build" 
+		classname="${packagePrefix}.SierpinskiTriangle.SierpinskiTriangleGUI" />
+	</target>
 </project>
