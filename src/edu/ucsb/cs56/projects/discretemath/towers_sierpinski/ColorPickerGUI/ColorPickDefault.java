@@ -39,14 +39,14 @@ public class ColorPickDefault {
 	*/
     public ColorPickDefault() {
 		
-		frame = new JFrame("Default Color Choices For Sierpinski Triangles");
+	frame = new JFrame("Default Color Choices For Sierpinski Triangles");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		CustomColorList = new HashMap<String,ArrayList<Color>>();
-		UserChoicesToSave = new HashMap<String,ArrayList<Color>>();
-		CreateDefaultChoices();
-		ChosenColorList = new ArrayList<Color>();
-		open = true;
-		//TITLE
+	CustomColorList = new HashMap<String,ArrayList<Color>>();
+	UserChoicesToSave = new HashMap<String,ArrayList<Color>>();
+	CreateDefaultChoices();
+	ChosenColorList = new ArrayList<Color>();
+	open = true;
+	//TITLE
         banner = new JLabel("Choose a Color Scheme in the drop down menu. You can preview the scheme or save your choice.",JLabel.CENTER);
         banner.setForeground(Color.black);
         banner.setBackground(Color.white);
@@ -89,7 +89,7 @@ public class ColorPickDefault {
 		MainPanel = new JPanel(new BorderLayout());
 		
 		MainPanel.add(TextPanel, BorderLayout.CENTER);
-        MainPanel.add(ComboChoices, BorderLayout.NORTH);
+		MainPanel.add(ComboChoices, BorderLayout.NORTH);
 
 		JPanel LeftPanel = new JPanel(new BorderLayout());
 		LeftPanel.add(ExitButton, BorderLayout.NORTH);
@@ -320,26 +320,27 @@ public class ColorPickDefault {
 	 Method that saves the chosen colors in the ChosenColorList 
 	 to a properties file in the build directory.
 	*/
-	public void WriteToPropertiesFile(){
+	public void WriteToPropertiesFile() {
 		
-		Properties prop = new Properties();
-    	try {
-			for (int i = 0; i < ChosenColorList.size(); i++) 
-			{
-				Color ColorToAdd = ChosenColorList.get(i);
-				String HexString = Integer.toHexString(ColorToAdd.getRGB());
-				String ColorName = "Color_" + Integer.toString(i);
-				prop.setProperty(ColorName, HexString); 
-			}
-			FileOutputStream Output = new FileOutputStream("build/DefaultColorProperties");
-			prop.store(Output, "Colors Saved by an instance of ColorPickDefault");
-			Output.flush();
-			Output.close();
-		} 
-		
-		catch (IOException ex) {
-    		ex.printStackTrace();
-        }
+	    Properties prop = new Properties();
+	    try {
+		for (int i = 0; i < ChosenColorList.size(); i++) 
+		    {
+			Color ColorToAdd = ChosenColorList.get(i);
+			String HexString = Integer.toHexString(ColorToAdd.getRGB());
+			// Removes opacity element "ff"
+			String HexString2 = HexString.substring(2);
+			String ColorName = Integer.toString(i);
+			prop.setProperty(ColorName, HexString2); 
+		    }
+
+		FileOutputStream Output = new FileOutputStream("colors.properties");
+		prop.store(Output, "Colors Saved by an instance of ColorPickDefault");
+		Output.flush();
+		Output.close();
+	    } catch (IOException ex) {
+		ex.printStackTrace();
+	    }
 	}
 	
 	/**
