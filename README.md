@@ -8,18 +8,32 @@ Java software to explore the relationship between the Towers of Hanoi and the Si
 * The Sierpsinki Triangle is a recursive, fractal design.  
 * It can be produced by removing all "even numbers" from Pascal's triangle where the number of rows is a power of 2, and connecting all adjacent odd numbers
 * The legal moves in the Towers of Hanoi with n disks correspond to the Sierpsinski triangle that results from this transformation of Pascal's Triangle with 2^n rows.
+* Simply put: the sum of the numbers in the nth row minus 1 == the total number of moves required to move an ordered stack of nth discs from one column to another.  
+(Note: The starting row in Pascal's Triangle is the 0th row)  
+Example:  
+If we had 0 discs, we need 0 moves. ((1) - 1)  
+If we had 1 disc, we need 1 move. ((1+1) - 1)  
+If we had 2 discs, we need 3 moves. ((1+2+1) - 1)  
+If we had 3 discs, we need 7 moves. ((1+3+3+1) - 1)  
+
+See for example: (Pascal's Triangle)
+
+http://oi59.tinypic.com/30d8qiq.jpg  
+
+Simply use the following command to run:
+```
+ant runPascal
+```
 
 The purpose of this project is to explore this relationship in software in various ways.
 
-See for example:
+See for example: (Sierpinski's Triangle and Tower of Hanoi)
 
 http://www.cs.ucsb.edu/~pconrad/cs40/12F/hwk/IC11/TowersOfHanoi2DiskTransitionsTowers.png
 
 http://www.cs.ucsb.edu/~pconrad/cs40/12F/hwk/IC11/TowersOfHanoi3DiskTransitions.png
 
 ## Running the Code
-
-There are actually two projects in the repo.
 
 ### Running the first project (build.xml)
 Simply use the following command:
@@ -48,8 +62,6 @@ and
 ```
 ant EX_GUI
 ```
-This project, at the moment, does not change the color scheme of the SVG output.
-There is a colors.properties file in the root directory of the project, however, that does contain the values of the color scheme. If these hex color code values are changed, and the program is run, you will see a change in the color scheme of the SVG output.
 
 ### Running the second project (build2.xml)
 Use the following command:
