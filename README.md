@@ -1,7 +1,13 @@
 cs56-discretemath-towers-sierpinski
 ===================================
 
-Java software to explore the relationship between the Towers of Hanoi and the Sierpinski Triangle
+## High-level Description (User's View)
+In the current state, this project is able to launch a Pascal Triangle GUI, a Sierpinski Triangle / Tower of Hanoi GUI, and generate a XML file which can be opened in the browser to show another Sierpinski Triangle / Tower of Hanoi. This project is meant to be Java software that explores the relationships among the Towers of Hanoi, Sierpinski's Triangle, and Pascal's Triangle. An issue that still needs to be done is creating a GUI for the XML file. A possible issue is adding color themes for the Pascal Triangle GUI.
+
+## Internal Documentation (Developer's View)
+* Although this project is listed under the Discrete Math category, a lot of possible future issues also involve GUI work. There is not too much mathematics involved in the programming if you're rusty on math. 
+* For creating the GUI for the XML file, JEditorPane does not support XML (only HTML) so a third party library would most likely be used.
+* For the Pascal's Triangle GUI the numbers in Pascal's Triangle are hard coded in. A future issue could be to generate these numbers.
 
 ## Explanation
 
@@ -18,28 +24,40 @@ If we had 3 discs, we need 7 moves. ((1+3+3+1) - 1)
 
 See for example: (Pascal's Triangle)
 
-http://oi59.tinypic.com/30d8qiq.jpg  
+![](http://oi59.tinypic.com/30d8qiq.jpg) 
+
+
+The purpose of this project is to explore this relationship in software in various ways.
+
+See for example: (Sierpinski's Triangle and Tower of Hanoi)  
+
+2 Disks:  
+![](http://www.cs.ucsb.edu/~pconrad/cs40/12F/hwk/IC11/TowersOfHanoi2DiskTransitionsTowers.png)  
+
+3 Disks:  
+![](http://www.cs.ucsb.edu/~pconrad/cs40/12F/hwk/IC11/TowersOfHanoi3DiskTransitions.png)  
+
+## Running the Code
+
+There are 3 projects in this repository.
+
+### Running the first project (build.xml)
 
 Simply use the following command to run:
 ```
 ant runPascal
 ```
 
-The purpose of this project is to explore this relationship in software in various ways.
+A future issue could be to allow the user to enter in how many rows they want in Pascal's Triangle (You might want to be able to generate the numbers in Pascal's Triangle before doing this). The code to compile and run the Pascal Triangle GUI is located in the build.xml file which is primarily used for the second project. Consider creating a separate build.xml file specifically for this project. 
 
-See for example: (Sierpinski's Triangle and Tower of Hanoi)
+### Running the second project (build.xml)
 
-http://www.cs.ucsb.edu/~pconrad/cs40/12F/hwk/IC11/TowersOfHanoi2DiskTransitionsTowers.png
-
-http://www.cs.ucsb.edu/~pconrad/cs40/12F/hwk/IC11/TowersOfHanoi3DiskTransitions.png
-
-## Running the Code
-
-### Running the first project (build.xml)
 Simply use the following command:
+
 ```
 ant run
 ```
+
 You will then be prompted for the input arguments (\<number_of_disks\> \<width\> \<height\> \<save_file_path\>)
 where \<width\> and \<height\> are the width and height in pixels of the resulting Scalable Vector Graphics image, and \<save_file_path\> is the name of the output file which will be saved in the root directory of the project. Note that the \<save_file_path\> you choose should end in either .xml or .html, this way it can be opened by any browser that supports html5.
 
@@ -63,7 +81,7 @@ and
 ant EX_GUI
 ```
 
-### Running the second project (build2.xml)
+### Running the third project (build2.xml)
 Use the following command:
 ```
 ant -f build2.xml -D#=numdisks run
