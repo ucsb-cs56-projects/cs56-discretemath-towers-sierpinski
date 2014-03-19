@@ -96,4 +96,9 @@
 	        <java fork="true" classpath="build" 
 		classname="${packagePrefix}.SierpinskiTriangle.SierpinskiTriangleGUI" />
 	</target>
+
+	<target name="runPascal" depends="compile" description="run the PascalTriangle program">
+	        <java fork="true" classpath="build" 
+		classname="${packagePrefix}.PascalTriangle.PascalTriangleGUI" />
+	</target>
 </project>

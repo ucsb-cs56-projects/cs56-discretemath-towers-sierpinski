@@ -271,27 +271,45 @@ public class ColorPickDefault {
 	 method that provides hardcoded defaults to load into the program. Also checks if there were saved user defined values.
 	*/
 	private void CreateDefaultChoices() { // CAN HARDCODE ADDITIONAL VALUES
-		ArrayList<Color> Rainbow = new ArrayList<Color>();
+		ArrayList<Color> Autumn = new ArrayList<Color>();
 		ArrayList<Color> SpringTime = new ArrayList<Color>();
-		ArrayList<Color> Winter = new ArrayList<Color>();
+		ArrayList<Color> Rainbow = new ArrayList<Color>();
 		ArrayList<Color> GrayScale = new ArrayList<Color>();
 		ArrayList<Color> Purples = new ArrayList<Color>();
+		// 5 new selections below added by George Shih, W14
+		ArrayList<Color> Winter = new ArrayList<Color>();
+		ArrayList<Color> Wood = new ArrayList<Color>();
+		ArrayList<Color> Inferno = new ArrayList<Color>();
+		ArrayList<Color> Shadow = new ArrayList<Color>();
+		ArrayList<Color> USA = new ArrayList<Color>();
+
 		
-		Collections.addAll(Rainbow, new Color(255,0,0), new Color(255,153,51), new Color(255,255,0), new Color(51,204,0), new Color(0,0,255));
+		Collections.addAll(Autumn, new Color(255,0,0), new Color(255,153,51), new Color(255,255,0), new Color(51,204,0), new Color(0,0,255));
 		Collections.addAll(SpringTime, new Color(0,255,0), new Color(0,204,102), new Color(0,204,204), new Color(153,0,204), new Color(255,153,153));
-		Collections.addAll(Winter, new Color(255,0,51), new Color(0,153,51), new Color(0,0,204), new Color(0,255,255), new Color(204,204,204));
+		Collections.addAll(Rainbow, new Color(255,0,51), new Color(0,153,51), new Color(0,0,204), new Color(0,255,255), new Color(204,204,204));
 		Collections.addAll(GrayScale, new Color(200,200,200), new Color(150,150,150), new Color(100,100,100), new Color(50,50,50), new Color(0,0,0));
 		Collections.addAll(Purples, new Color(255,102,255), new Color(255,0,255), new Color(204,0,204), new Color(153,0,153), new Color(51,0,51));
+		// Not too certain what the last 2 Colors are used for, they don't seem to change the color scheme at all
+		Collections.addAll(Winter, new Color(0,255,255), new Color(0,0,255), new Color(0,128,255), new Color(0,0,0), new Color(0,0,0));
+		Collections.addAll(Wood, new Color(100,50,0), new Color(160,80,0), new Color(200,160,120), new Color(0,0,0), new Color(0,0,0));
+		Collections.addAll(Inferno, new Color(255,0,0), new Color(255,75,0), new Color(255,0,75), new Color(0,0,0), new Color(0,0,0));
+		Collections.addAll(Shadow, new Color(0,0,0), new Color(255,0,0), new Color(200,0,0), new Color(0,0,0), new Color(0,0,0));
+		Collections.addAll(USA, new Color(0,0,255), new Color(255,0,0), new Color(225,225,225), new Color(0,0,0), new Color(0,0,0));
 		
-		
-		CustomColorList.put("Rainbow",Rainbow);
+		CustomColorList.put("Autumn",Autumn);
 		CustomColorList.put("SpringTime",SpringTime);
-		CustomColorList.put("Winter",Winter);
+		CustomColorList.put("Rainbow",Rainbow);
 		CustomColorList.put("GrayScale",GrayScale);
 		CustomColorList.put("Purples",Purples);
+		CustomColorList.put("Winter",Winter);
+		CustomColorList.put("Wood",Wood);
+		CustomColorList.put("Inferno",Inferno);
+		CustomColorList.put("Shadow",Shadow);
+		CustomColorList.put("USA",USA);
 		
 		CheckSavedUserDefinedSchemes();
 	}
+
 	/**
 	 Updates the combobox with CustomColorList values
 	*/
