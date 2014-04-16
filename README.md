@@ -1,6 +1,12 @@
 cs56-discretemath-towers-sierpinski
 ===================================
 
+project history
+===============
+```
+ W14 | bkiefer13 5pm | bzimm | Graphical hangman game
+```
+
 ## High-level Description (User's View)
 In the current state, this project is able to launch a Pascal Triangle GUI, a Sierpinski Triangle / Tower of Hanoi GUI, and generate a XML file which can be opened in the browser to show another Sierpinski Triangle / Tower of Hanoi. This project is meant to be Java software that explores the relationships among the Towers of Hanoi, Sierpinski's Triangle, and Pascal's Triangle. An issue that still needs to be done is creating a GUI for the XML file. A possible issue is adding color themes for the Pascal Triangle GUI.
 
