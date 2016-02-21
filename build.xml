@@ -32,7 +32,7 @@
     <target name="getArgs" unless="args" description="prompts for command line args">
         <input addProperty="args" message="Enter the desired arguments with the form: &lt;number_of_disks> &lt;width> &lt;height> &lt;save_file_path> "/>
     </target>
-    
+
     <target name="clean" description="delete unnecessary files and directories">
         <delete dir="build" quiet="true" />
         <delete dir="javadoc" quiet="true" />
@@ -96,9 +96,14 @@
 	        <java fork="true" classpath="build" 
 		classname="${packagePrefix}.SierpinskiTriangle.SierpinskiTriangleGUI" />
 	</target>
-
-	<target name="runPascal" depends="compile" description="run the PascalTriangle program">
+<!-- Arguments added by Caitlin Scarberry, W16 -->
+    <target name="getNumRows" unless="numRows">
+        <input addProperty="numRows" message="Enter the desired number of rows:"/>
+    </target>
+	<target name="runPascal" depends="compile,getNumRows" description="run the PascalTriangle program">
 	        <java fork="true" classpath="build" 
-		classname="${packagePrefix}.PascalTriangle.PascalTriangleGUI" />
+		classname="${packagePrefix}.PascalTriangle.PascalTriangleGUI">
+         <arg line="${numRows}"/>
+    </java>
 	</target>
 </project>
