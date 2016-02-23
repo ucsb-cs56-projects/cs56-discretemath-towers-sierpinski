@@ -99,19 +99,30 @@ public class ColorPickDefault {
 	MainPanel.add(ComboChoices, BorderLayout.NORTH);
 	
 	JPanel LeftPanel = new JPanel(new BorderLayout());
+	JPanel TopTopLeftPanel = new JPanel(new BorderLayout());
+	JPanel TopBottomLeftPanel = new JPanel(new BorderLayout());
+	JPanel BottomTopLeftPanel = new JPanel(new BorderLayout());
+	JPanel BottomBottomLeftPanel = new JPanel(new BorderLayout());
 	JPanel TopLeftPanel = new JPanel(new BorderLayout());
 	JPanel BottomLeftPanel = new JPanel(new BorderLayout());
-	TopLeftPanel.add(CustomButton, BorderLayout.NORTH);
-	TopLeftPanel.add(ResetButton, BorderLayout.SOUTH);
-	BottomLeftPanel.add(PreviewButton, BorderLayout.NORTH);
+
+	TopTopLeftPanel.add(CustomButton, BorderLayout.CENTER);
+	TopBottomLeftPanel.add(ResetButton, BorderLayout.CENTER);
+	BottomTopLeftPanel.add(PreviewButton, BorderLayout.CENTER);
+	BottomBottomLeftPanel.add(ExitButton, BorderLayout.CENTER);
+
+	TopLeftPanel.add(TopTopLeftPanel, BorderLayout.NORTH);
+	TopLeftPanel.add(TopBottomLeftPanel, BorderLayout.SOUTH);
+	BottomLeftPanel.add(BottomTopLeftPanel, BorderLayout.NORTH);
 	BottomLeftPanel.add(ExitButton, BorderLayout.SOUTH);
+	
 	LeftPanel.add(TopLeftPanel, BorderLayout.NORTH);
 	LeftPanel.add(BottomLeftPanel, BorderLayout.SOUTH);
 		
 	frame.add(MainPanel,BorderLayout.CENTER);
 	frame.add(banner,BorderLayout.NORTH);
 	frame.add(LeftPanel,BorderLayout.WEST);
-	frame.setSize(550,165);
+	frame.setSize(550,170);
 	//frame.pack();
         frame.setVisible(true);
     }
