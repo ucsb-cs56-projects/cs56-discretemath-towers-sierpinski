@@ -12,9 +12,12 @@
     <target name="compile" >
         <mkdir dir="build" />
         <javac srcdir="src" destdir="build" includeantruntime="false" debug="true" debuglevel="lines,vars,source" >
+
             <classpath>
                 <pathelement location="build"/>
-                <pathelement location="lib/junit-4.8.2.jar"/>
+                <fileset dir="lib">
+                    <include name="**/*.jar"/>
+                </fileset>
             </classpath>
         </javac>
     </target>
@@ -94,7 +97,15 @@
 <!--  Added by George Shih, W14 -->
         <target name="runGUI" depends="compile" description="run the GUI SierpinskiTriangle program">
 	        <java fork="true" classpath="build" 
-		classname="${packagePrefix}.SierpinskiTriangle.SierpinskiTriangleGUI" />
+		classname="${packagePrefix}.SierpinskiTriangle.SierpinskiTriangleGUI">
+        <classpath>
+                <fileset dir="lib">
+                    <include name="**/*.jar"/>
+                </fileset>
+                <pathelement location="lib/junit-4.8.2.jar"/>
+                <pathelement location="build"/>
+            </classpath>
+    </java>
 	</target>
 <!-- Arguments added by Caitlin Scarberry, W16 -->
     <target name="getNumRows" unless="numRows">
