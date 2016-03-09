@@ -20,7 +20,8 @@ public class ColorPickRunner {
     protected JLabel banner;
     private JFrame frame;
     private JPanel TextPanel;
-    private JPanel MainPanel; 
+    private JPanel MainPanel;
+    private JPanel BottomPanel;
     private JTextArea text;
     private ArrayList<Color> ColorList;
     public int CurrentColor;
@@ -39,11 +40,11 @@ public class ColorPickRunner {
 	open = true;
 		
 	//TITLE
-        banner = new JLabel("Colors Chosen Already For Triangles",JLabel.CENTER);
+        banner = new JLabel("Selected Colors",JLabel.CENTER);
         banner.setForeground(Color.black);
         banner.setBackground(Color.white);
         banner.setOpaque(true);
-        banner.setFont(new Font("SansSerif", Font.BOLD, 20));
+        banner.setFont(new Font("Courier New", Font.BOLD, 20));
 		
 		//MAIN TEXT AREA
 		TextPanel = new JPanel(new BorderLayout());
@@ -55,20 +56,23 @@ public class ColorPickRunner {
 		TextPanel.add(scroller);
 				
 		//ADD BUTTON AT BOTTOM OF PICKER PANEL TO CONFIRM A COLOR CHOICE
-		JButton ChooseButton = new JButton("Choose Next Color");
+		JButton ChooseButton = new JButton("Add Color");
 		ChooseButton.addActionListener(new ChooseListener());
 		
 		//ADD BUTTON AT BOTTOM OF PICKER PANEL TO EXIT AND RETURN VALUE TO PARENT PROG CALL
-		JButton ExitButton = new JButton("Close Window and Export Colors");
+		JButton ExitButton = new JButton("Export Colors and Close");
 		ExitButton.addActionListener(new ExitListener());
 		
 		MainPanel = new JPanel(new BorderLayout());
-		
-		MainPanel.add(TextPanel, BorderLayout.CENTER);
+		BottomPanel = new JPanel(new BorderLayout());
+
 		MainPanel.add(banner, BorderLayout.NORTH);
-		MainPanel.add(ChooseButton, BorderLayout.EAST);
-		MainPanel.add(ExitButton, BorderLayout.WEST);
-		
+		BottomPanel.add(ChooseButton, BorderLayout.NORTH);
+	        BottomPanel.add(ExitButton, BorderLayout.SOUTH);
+		MainPanel.add(BottomPanel, BorderLayout.SOUTH);
+		MainPanel.add(TextPanel, BorderLayout.CENTER);
+
+	
 		frame.add(MainPanel);
 		frame.pack();
 		frame.setVisible(true);

@@ -3,137 +3,100 @@ package edu.ucsb.cs56.projects.discretemath.towers_sierpinski.SierpinskiTriangle
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.awt.geom.AffineTransform;
+
+import org.apache.batik.swing.JSVGCanvas;
+import org.apache.batik.swing.gvt.GVTTreeRendererAdapter;
+import org.apache.batik.swing.gvt.GVTTreeRendererEvent;
+import org.apache.batik.swing.svg.SVGDocumentLoaderAdapter;
+import org.apache.batik.swing.svg.SVGDocumentLoaderEvent;
+import org.apache.batik.swing.svg.GVTTreeBuilderAdapter;
+import org.apache.batik.swing.svg.GVTTreeBuilderEvent;
+
 
 /**
-   Runs a GUI version of the first project. (Originally xml file)
-   Needs improvement because JEditorPane cannot display xml, only html
-   @author George Shih
-   @version CS56 Winter 2014
+   *Runs a GUI version of the first project. Uses the Batik library to display SVG image.
+   *@author George Shih
+   *@author Caitlin Scarberry
+   *@version CS56 Winter 2016
 */
-
-public class SierpinskiTriangleGUI extends JFrame implements ActionListener {
-
-    // Variables
-    private String fstr = "";
-    private JButton button;
-
-    // Main Method
-    public static void main(String [] args) {
-	SierpinskiTriangleGUI gui = new SierpinskiTriangleGUI();
-	gui.setString();
-	gui.runGUI();
-    }
-
-    // Grab the output.html file and put the content into a string
-    public void setString() {
-	File file = new File("output.html"); // Grab XML file
-	FileInputStream input = null;
-	try {
-	    input = new FileInputStream(file);
-	   
-	    System.out.println("Total file size to read (in bytes) : "
-			       + input.available());
-	    
-	    int content;
-	    while ((content = input.read()) != -1) {
-		// Convert to char and append it
-		fstr += (char) content;
-	    }
-	    //System.out.println(fstr);  // Testing purposes
-	} catch (IOException e) {
-	    e.printStackTrace();
-	} finally {
-	    try {
-		if (input != null)
-		    input.close();
-	    } catch (IOException ex) {
-		ex.printStackTrace();
-	    }
-	}
-    }
-
-        /*
-	// (If needed) Adds backslashes on all current quotation marks 
-	String backslash = "\\";
-	String quotation = "\"";
-	String fstr2 = fstr.replace("\"", backslash + quotation);
-	*/
-
-	// GUI
-    public void runGUI() {
-	try {
-	    // Feel free to append to variable "html"
-	    String html = "";
-	    html += "<html><head><title>Sierpinski Triangle GUI</title></head>";
-	    html += "<body bgcolor='#00FFFF'><hr/><font size=20>";
-	    html += fstr;  // String version of the XML file
-	    html += "</font><hr/></body></html>";
-
-	    
-	    // JFrame and JButton
-	    JFrame frame = new JFrame();
-	    button = new JButton("Color Picker");
-	    button.addActionListener(this);
-	    frame.getContentPane().add(BorderLayout.NORTH, button);
-
-	    // JEditorPane
-	    JEditorPane editor = new JEditorPane("text/html", html);
-	    frame.add(editor);
-
-	    frame.setVisible(true);
-	    frame.setSize(600,600);
-	    frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-	}
-	catch(Exception e) {
-	    e.printStackTrace();
-	    System.out.println("Some problem has occured" + e.getMessage());
-	}
-    }
-    
-    // What's performed when button is clicked
-    public void actionPerformed(ActionEvent event) {
-	button.setText("TODO: Launch the Color Picker");
-    }
-
-
-}
-
-
-
-
-/*
-// Method 2 with hard coded classpath URL
-// JTextPane also cannot display the XML code like in a browser
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.net.*;
 
 public class SierpinskiTriangleGUI {
+	public static void main(String[] args) {
 
-    public static void main(String args[]) {  
-	JTextPane textpane = new JTextPane();
-	JScrollPane scroll  = new JScrollPane();
-	scroll.getViewport().add(textpane);
-	JFrame frame = new JFrame();
-	frame.getContentPane().add(scroll);
-	frame.pack();
-	frame.setSize(600,600);
-	frame.setVisible(true); 
-	frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-	
-	try {
-	    URL url = new URL("file:///cs/student/wshih/cs56/cs56-discretemath-towers-sierpinski/output.html");
-	    textpane.setPage(url);
-	} 
-	catch (Exception e) {
-	    e.printStackTrace();
-	}
+        // Create a new JFrame.
+        JFrame f = new JFrame("Sierpinski Triangle");
+        SierpinskiTriangleGUI app = new SierpinskiTriangleGUI(f);
+
+        // Display the frame.
+        f.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        });
+        f.setVisible(true);
     }
 
+    // The frame.
+    protected JFrame frame;
+
+    //Transform for zooming/moving the image
+    private AffineTransform svgTransform = new AffineTransform();
+
+    // The SVG canvas.
+    protected JSVGCanvas svgCanvas = new JSVGCanvas();
+
+    public SierpinskiTriangleGUI(JFrame f) {
+        final JPanel panel = new JPanel(new BorderLayout());
+        panel.add("Center",svgCanvas);
+        f.add(panel);
+        File file = new File("output.html");
+        try {
+            svgCanvas.setURI(file.toURL().toString());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        svgCanvas.setRenderingTransform(svgTransform);
+        JPanel zoomControls = new JPanel();
+        JButton in = new JButton();
+        in.setText("Zoom In");
+        in.addActionListener(e -> {svgTransform.scale(1.2,1.2); svgCanvas.setRenderingTransform(svgTransform);});
+        JButton out = new JButton();
+        out.setText("Zoom out");
+         out.addActionListener(e -> {svgTransform.scale(.8,.8); svgCanvas.setRenderingTransform(svgTransform);});
+        zoomControls.add(in);
+        zoomControls.add(out);
+
+       	panel.add("South",zoomControls);
+
+
+       	MouseAdapter listener = new MouseAdapter(){
+       		long lastUpdate;
+       		private int mouseX;
+       		private int mouseY;
+       		public void mouseDragged(MouseEvent e){
+       			/*restricting how often the translation is applied
+       			  actually makes dragging smoother
+       			  and uses less of the computer's resources*/
+	       		if(System.currentTimeMillis()-lastUpdate>(1000/24)){
+	       			svgTransform.translate(e.getX()-mouseX, e.getY()-mouseY);
+	       			svgCanvas.setRenderingTransform(svgTransform);
+	       			mouseX = e.getX();
+	       			mouseY = e.getY();
+	       			lastUpdate = System.currentTimeMillis();
+       			}
+       		}
+       		public void mousePressed(MouseEvent e){
+       			mouseX = e.getX();
+       			mouseY = e.getY();
+       		}
+       	};
+
+       	svgCanvas.addMouseMotionListener(listener);
+       	svgCanvas.addMouseListener(listener);
+
+        f.setSize(400, 400);
+    }
+    	
 }
-*/

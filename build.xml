@@ -12,9 +12,12 @@
     <target name="compile" >
         <mkdir dir="build" />
         <javac srcdir="src" destdir="build" includeantruntime="false" debug="true" debuglevel="lines,vars,source" >
+
             <classpath>
                 <pathelement location="build"/>
-                <pathelement location="lib/junit-4.8.2.jar"/>
+                <fileset dir="lib">
+                    <include name="**/*.jar"/>
+                </fileset>
             </classpath>
         </javac>
     </target>
@@ -32,7 +35,7 @@
     <target name="getArgs" unless="args" description="prompts for command line args">
         <input addProperty="args" message="Enter the desired arguments with the form: &lt;number_of_disks> &lt;width> &lt;height> &lt;save_file_path> "/>
     </target>
-    
+
     <target name="clean" description="delete unnecessary files and directories">
         <delete dir="build" quiet="true" />
         <delete dir="javadoc" quiet="true" />
@@ -94,11 +97,24 @@
 <!--  Added by George Shih, W14 -->
         <target name="runGUI" depends="compile" description="run the GUI SierpinskiTriangle program">
 	        <java fork="true" classpath="build" 
-		classname="${packagePrefix}.SierpinskiTriangle.SierpinskiTriangleGUI" />
+		classname="${packagePrefix}.SierpinskiTriangle.SierpinskiTriangleGUI">
+        <classpath>
+                <fileset dir="lib">
+                    <include name="**/*.jar"/>
+                </fileset>
+                <pathelement location="lib/junit-4.8.2.jar"/>
+                <pathelement location="build"/>
+            </classpath>
+    </java>
 	</target>
-
-	<target name="runPascal" depends="compile" description="run the PascalTriangle program">
+<!-- Arguments added by Caitlin Scarberry, W16 -->
+    <target name="getNumRows" unless="numRows">
+        <input addProperty="numRows" message="Enter the desired number of rows:"/>
+    </target>
+	<target name="runPascal" depends="compile,getNumRows" description="run the PascalTriangle program">
 	        <java fork="true" classpath="build" 
-		classname="${packagePrefix}.PascalTriangle.PascalTriangleGUI" />
+		classname="${packagePrefix}.PascalTriangle.PascalTriangleGUI">
+         <arg line="${numRows}"/>
+    </java>
 	</target>
 </project>

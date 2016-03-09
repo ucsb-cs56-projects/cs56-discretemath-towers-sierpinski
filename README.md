@@ -8,12 +8,11 @@ project history
 ```
 
 ## High-level Description (User's View)
-In the current state, this project is able to launch a Pascal Triangle GUI, a Sierpinski Triangle / Tower of Hanoi GUI, and generate a XML file which can be opened in the browser to show another Sierpinski Triangle / Tower of Hanoi. This project is meant to be Java software that explores the relationships among the Towers of Hanoi, Sierpinski's Triangle, and Pascal's Triangle. An issue that still needs to be done is creating a GUI for the XML file. A possible issue is adding color themes for the Pascal Triangle GUI.
+In the current state, this project is able to launch a Pascal Triangle GUI, a Sierpinski Triangle / Tower of Hanoi GUI, and generate a XML file which can be opened in the browser to show another Sierpinski Triangle / Tower of Hanoi. This project is meant to be Java software that explores the relationships among the Towers of Hanoi, Sierpinski's Triangle, and Pascal's Triangle. An issue that still needs to be done is adding color themes for the Pascal Triangle GUI.
 
 ## Internal Documentation (Developer's View)
 * Although this project is listed under the Discrete Math category, a lot of possible future issues also involve GUI work. There is not too much mathematics involved in the programming if you're rusty on math. 
-* For creating the GUI for the XML file, JEditorPane does not support XML (only HTML) so a third party library would most likely be used.
-* For the Pascal's Triangle GUI the numbers in Pascal's Triangle are hard coded in. A future issue could be to generate these numbers.
+* For creating the GUI for the XML file, JEditorPane does not support XML (only HTML) so a third party library (Batik) was used.
 
 ## Explanation
 
@@ -54,7 +53,7 @@ Simply use the following command to run:
 ant runPascal
 ```
 
-A future issue could be to allow the user to enter in how many rows they want in Pascal's Triangle (You might want to be able to generate the numbers in Pascal's Triangle before doing this). The code to compile and run the Pascal Triangle GUI is located in the build.xml file which is primarily used for the second project. Consider creating a separate build.xml file specifically for this project. 
+From the GUI, the user can change how many rows there are in the triangle. The code to compile and run the Pascal Triangle GUI is located in the build.xml file which is primarily used for the second project. Consider creating a separate build.xml file specifically for this project. 
 
 ### Running the second project (build.xml)
 
@@ -78,6 +77,11 @@ When opening the output.html file in your browser you will see something like th
 
 ![](http://i.imgur.com/Huqj1wL.png)
 
+You can also view the output in a swing GUI by using:
+```
+ant runGUI
+```
+
 Within this project there is also a color picker tool which you can run using
 ```
 ant EX_DEF
@@ -99,3 +103,6 @@ This project uses a swing GUI but does not use the SVGraphics like the other pro
 Below is a view of the program running with numdisks set to 2.
 
 ![](http://imgur.com/Rtdpv11.png)
+
+## W16 final remarks
+The purpose of this project probably seems a little vague and confusing at first. Don't worry; play around with it some and you'll understand it better. The code in the PascalTriangle package explores the relationship between Sierpinski's and Pascal's triangles, and the code in the SierpinskiTriangle package explores the relationship between Sierpinski's triangle and Towers of Hanoi problem. The code in the ColorPickerGUI and SVGraphics packages deal with how to display the generated images. A feature that could be added is changing the number of disks in the Towers of Hanoi display at runtime. Another feature that could be added is a main entry point for all the different parts of the project, so the user doesn't have to look through a long and complicated build.xml file to figure out how to run things. There are two currently known bugs: first, when Pascal's triangle gets past about 30 rows, the numbers get too big to be stored in an int, and the triangle starts having empty spaces. Second, when Pascal's triangle is scaled down far enough that the scale becomes negative, it starts getting bigger but mirrored. The code that generates the display for Pascal's triangle could be refactored so that it is cleaner.
